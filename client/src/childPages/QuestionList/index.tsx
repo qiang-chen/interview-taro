@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-18 20:00:50
+ * @LastEditTime 2020-11-19 20:14:56
  * @LastEditors cq
  */
 
@@ -18,11 +18,10 @@ import { AtFloatLayout, AtSwipeAction, AtModal, AtToast } from 'taro-ui'
 import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { HomeState } from "@/ts-types/store/index";
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.scss'
 
 
-console.log(PageBarRoot, 222)
 type HomeProps = {
   dispatch?: any
 }
@@ -34,38 +33,30 @@ type Iprops = HomeProps & Partial<HomeState>
 const namespace = 'home';
 
 
-const homeList = [
-  {
-    icon: "https://img.sunlands.wang/addSalt/img/1.0/home/inputVoucher.png",
-    content: "题库录入",
-    names: "bs1"
-  }, {
-    icon: "https://img.sunlands.wang/addSalt/img/1.0/home/lookVoucher.png",
-    content: "题库列表",
-    names: "bs2"
-  }, {
-    icon: "https://img.sunlands.wang/addSalt/img/1.0/home/profitLossRF.png",
-    content: "论坛交流",
-    names: "bs3"
-  }
-]
-
-
-
-
 const Home: React.FC<Iprops> = ({ }) => {
-  // 点击顶部
-  const handGetUserInfo = () => {
-    console.log("点击顶部")
-  }
 
   const handleClickTitle = () => {
     console.log("点击首页标题")
   }
 
-  const handChangeItem = () => {
-    console.log("点击每一个");
-  }
+  useEffect(() => {
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'subject',
+      // 传递给云函数的event参数
+      data: {
+        keyword: ""
+      }
+    }).then(res => {
+      const { result } = res;
+      const { code, data } = result as any;
+      if(!code){
+        console.log("服务器错误");
+        return 
+      }
+      console.log(data);
+    })
+  }, [])
 
   // 返回上一级
   const handleClickBack = () => {

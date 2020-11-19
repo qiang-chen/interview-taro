@@ -1,13 +1,27 @@
 {
   "dependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@tarojs/plugin-sass": "^2.2.10",
     "dva-core": "^2.0.3",
     "dva-loading": "^3.0.21",
     "dva-model-extend": "^0.1.2",
+    "husky": "^4.3.0",
     "node-sass": "^5.0.0",
+    "pre-commit": "^1.2.2",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "taro-ui": "^2.3.4",
     "wx-server-sdk": "^2.3.2"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }

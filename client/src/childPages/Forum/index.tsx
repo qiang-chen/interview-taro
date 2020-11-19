@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-19 14:57:44
+ * @LastEditTime 2020-11-19 20:15:20
  * @LastEditors cq
  */
 
@@ -33,37 +33,11 @@ type Iprops = HomeProps & Partial<HomeState>
 const namespace = 'home';
 
 
-const homeList = [
-  {
-    icon: "https://img.sunlands.wang/addSalt/img/1.0/home/inputVoucher.png",
-    content: "题库录入",
-    names: "bs1"
-  }, {
-    icon: "https://img.sunlands.wang/addSalt/img/1.0/home/lookVoucher.png",
-    content: "题库列表",
-    names: "bs2"
-  }, {
-    icon: "https://img.sunlands.wang/addSalt/img/1.0/home/profitLossRF.png",
-    content: "论坛交流",
-    names: "bs3"
-  }
-]
-
-
-
 
 const Home: React.FC<Iprops> = ({ }) => {
-  // 点击顶部
-  const handGetUserInfo = () => {
-    console.log("点击顶部")
-  }
 
   const handleClickTitle = () => {
     console.log("点击首页标题")
-  }
-
-  const handChangeItem = () => {
-    console.log("点击每一个");
   }
 
   // 返回上一级
