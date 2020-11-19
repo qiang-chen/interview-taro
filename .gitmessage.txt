@@ -17,7 +17,7 @@ type: subject
 # - type
 # feat: 新增feature
 # fix: 修复bug
-# docs: 仅仅修改了文档，如readme.md
+# docs: 仅仅修改了文档，如readme.md等文档
 # style: 仅仅是对格式进行修改，如逗号、缩进、空格等。不改变代码逻辑。
 # refactor: 代码重构，没有新增功能或修复bug
 # perf: 优化相关，如提升性能、用户体验等。
