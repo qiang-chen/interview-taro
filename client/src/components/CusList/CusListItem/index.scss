@@ -1,0 +1,149 @@
+.at-cuslist__item-container {
+  display: flex;
+  align-items: center;
+}
+
+.at-cuslist__item-container .item-icon {
+  margin-right: 24rpx;
+}
+
+.at-cuslist__item {
+  padding: 40px 40px;
+  margin: 17px 0;
+  position: relative;
+  box-sizing: border-box;
+  color: #333;
+  font-size: 30px;
+  line-height: 1.5;
+  transition: background-color 0.3s;
+  position: relative;
+  background: #fff;
+}
+
+.at-cuslist__item:active {
+  background-color: #F0F0F0;
+}
+
+.at-cuslist__item::after {
+  content: '';
+  position: absolute;
+  transform-origin: center;
+  box-sizing: border-box;
+  pointer-events: none;
+  top: auto;
+  left: 24rpx;
+  right: 0;
+  bottom: 0;
+  transform: scaleY(0.5);
+  border-bottom: 1PX solid #d6e4ef;
+}
+
+.at-cuslist__item--thumb .item-thumb {
+  margin-right: 24rpx;
+  width: 56rpx;
+  height: 56rpx;
+}
+
+.at-cuslist__item--thumb .item-thumb__info {
+  width: 100%;
+  height: 100%;
+}
+
+.at-cuslist__item--disabled .at-cuslist__item-container {
+  opacity: 0.3;
+}
+
+.at-cuslist__item--disabled:active {
+  background-color: transparent !important;
+}
+
+.at-cuslist__item--no-border::after {
+  content: initial;
+  border: none;
+}
+
+.at-cuslist__item .item-content__info-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+  font-size: inherit;
+  line-height: 1.5;
+}
+
+.at-cuslist__item .item-content__info-note {
+  color: #999;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.at-cuslist__item .item-extra {
+  position: relative;
+}
+
+.at-cuslist__item .item-extra__info,
+.at-cuslist__item .item-extra__icon,
+.at-cuslist__item .item-extra__image,
+.at-cuslist__item .item-extra__switch {
+  display: inline-block;
+}
+
+.at-cuslist__item .item-extra__info {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  color: #999;
+  padding-right: 30rpx;
+  font-size: 30px;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.at-cuslist__item-imgbox {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+}
+
+.at-cuslist__item-img {
+  width: 100%;
+  height: 100%;
+}
+
+.at-cuslist__item .item-extra__icon-arrow {
+  color: #CCC;
+  font-size: 48rpx;
+}
+
+.at-cuslist__item .item-extra__switch {
+  vertical-align: middle;
+}
+
+.at-cuslist__item .item-extra__image {
+  width: 56rpx;
+  height: 56rpx;
+  vertical-align: middle;
+  margin-right: 30rpx;
+}
+
+.at-cuslist__item .item-extra__image__info {
+  width: 100%;
+  height: 100%;
+}
+
+.at-cuslist__item .item-extra__image-info {
+  width: 100%;
+  height: 100%;
+}
+
+.at-cuslist__item-content {
+  flex: 1;
+  overflow: hidden;
+  margin-right: 40rpx;
+}
+
+.at-cuslist__item-extra {
+  max-width: 235rpx;
+  text-align: right;
+}

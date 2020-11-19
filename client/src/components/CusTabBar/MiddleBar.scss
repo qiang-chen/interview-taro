@@ -1,0 +1,19 @@
+.comp-MiddleBar {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 1001;
+
+  .img-box {
+    width: 104px;
+    height: 104px;
+    background: #fff;
+    margin: 0 auto;
+    border-radius: 50%;
+  }
+
+  image {
+    width: 100%;
+  }
+}

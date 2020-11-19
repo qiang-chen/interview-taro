@@ -1,0 +1,17 @@
+.comp_config_btn {
+  width: 100%;
+  height: 88px;
+  background-image: linear-gradient(0deg, #33C9BB 0%, #54E1D3 99%);
+  border-radius: 6px;
+  font-family: PingFangSC-Regular;
+  font-size: 30px;
+  color: #FFFFFF;
+  letter-spacing: 0.88px;
+  line-height: 88px;
+  text-align: center;
+}
+
+.disabled{
+  background: #eee;
+  color:#000;
+}

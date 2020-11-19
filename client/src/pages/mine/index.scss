@@ -1,0 +1,32 @@
+page {
+  height: 100%;
+}
+
+.page-mine {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  background: #f9f9f9;
+}
+
+.mine-userInfo {
+  background: #fff;
+  padding: 40px;
+}
+
+.mine-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.mine-username {
+  height: 120px;
+  margin-left: 36px;
+  font-family: PingFangSC-Medium;
+  font-size: 34px;
+  color: #53575B;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,34 @@
+@mixin clearfix {
+  zoom: 1;
+
+  &::before,
+  &::after {
+    display: table;
+    content: '';
+  }
+
+  &::after {
+    clear: both;
+  }
+}
+
+.ctn-btn-none {
+  position: relative;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: left;
+  border-radius: 0;
+  overflow: visible;
+  line-height: normal;
+  background: transparent;
+
+  &::after {
+    width: auto;
+    height: auto;
+    display: none;
+  }
+}
+
+.clearfix {
+  @include clearfix;
+}

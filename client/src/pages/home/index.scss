@@ -1,0 +1,120 @@
+page {
+  width: 100%;
+  height: 100%;
+
+
+  .home_title {
+    font-family: PingFangSC-Medium;
+    font-size: 34px;
+    color: #53575B;
+    letter-spacing: 1px;
+    line-height: 34px;
+  }
+
+  .at-float-layout__container .layout-body {
+    padding: 0;
+  }
+
+  .home_content {
+    width: 100%;
+    box-sizing: content-box;
+
+    .home_content_title {
+      height: 110px;
+      line-height: 110px;
+      background: #F9F9F9;
+      display: flex;
+
+      .home_content_title_left {
+        flex: 1;
+        border-right: solid 1px #E8E8E8;
+        font-family: PingFangSC-Regular;
+        font-size: 30px;
+        color: #33C9BB;
+        letter-spacing: 0.88px;
+        text-align: center;
+      }
+
+      .home_content_title_right {
+        flex: 1;
+        font-family: PingFangSC-Regular;
+        font-size: 30px;
+        color: #90959A;
+        letter-spacing: 0.88px;
+        text-align: center;
+      }
+    }
+
+    .home_content_list_item {
+      height: 129px;
+      padding-right: 30px;
+      margin-left: 30px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #E8E8E8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .home_content_list_item_left {
+        font-family: PingFangSC-Regular;
+        font-size: 30px;
+        color: #53575B;
+        letter-spacing: 0.88px;
+      }
+
+      .home_content_list_item_right {
+        background: #FF7A36;
+        border-radius: 6px;
+        width: 96px;
+        height: 40px;
+        font-family: PingFangSC-Regular;
+        font-size: 22px;
+        color: #fff;
+        letter-spacing: 0.75px;
+        text-align: center;
+        line-height: 40px;
+        font-weight: 800;
+      }
+
+      .bg {
+        background: #33C9BB;
+        color: #fff;
+        border-radius: 6px;
+      }
+    }
+  }
+
+  .home_down {
+    width: 18px;
+    height: 18px;
+    margin-left: 18px;
+  }
+
+  .page-home {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+
+    .home_content {
+      width: 100%;
+      height: 100%;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-flow: wrap row;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+
+  .at-modal__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .content-simple {
+    text-align: center;
+  }
+}
