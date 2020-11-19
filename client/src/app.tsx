@@ -3,7 +3,7 @@
  * @description 
  * @author cq
  * @Date 2020-11-17 20:02:40
- * @LastEditTime 2020-11-19 16:14:23
+ * @LastEditTime 2020-11-19 20:10:34
  * @LastEditors cq
  */
 import React from 'react'
@@ -22,16 +22,6 @@ class App extends React.Component {
       env: 'yulin-9g6l3xz5b5e76bdd',
       traceUser: true,
     })
-    const a=await Taro.cloud.callFunction({
-      // 要调用的云函数名称
-      name: 'login',
-      // 传递给云函数的event参数
-      data: {
-        x: 1,
-        y: 2,
-      }
-    });
-    console.log(a)
   }
 
   componentDidShow() { }

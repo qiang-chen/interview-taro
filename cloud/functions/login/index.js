@@ -2,7 +2,7 @@
  * @description 
  * @author cq
  * @Date 2020-11-19 14:21:46
- * @LastEditTime 2020-11-19 17:14:21
+ * @LastEditTime 2020-11-19 20:00:25
  * @LastEditors cq
  */
 // 云函数模板
@@ -23,12 +23,12 @@ cloud.init({
  * 
  */
 exports.main = async (event, context) => {
-  console.log(event,11)
-  console.log(context,22)
+  // console.log(event,11)
+  // console.log(context,22)
   const db = cloud.database();
   // 查询题目
   const subjectCollection = await db.collection('subject').get()
-  console.log(subjectCollection.data,33)
+  // console.log(subjectCollection.data,33)
   // 可执行其他自定义逻辑
   // console.log 的内容可以在云开发云函数调用日志查看
 
