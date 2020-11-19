@@ -13,5 +13,15 @@
     "redux": "^4.0.5",
     "taro-ui": "^2.3.4",
     "wx-server-sdk": "^2.3.2"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }
