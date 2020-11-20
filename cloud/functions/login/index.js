@@ -1,14 +1,14 @@
 /**
- * @description 
+ * @description 登陆相关操作
  * @author cq
  * @Date 2020-11-19 14:21:46
- * @LastEditTime 2020-11-19 20:00:25
+ * @LastEditTime 2020-11-20 16:51:56
  * @LastEditors cq
  */
 // 云函数模板
 // 部署：在 cloud-functions/login 文件夹右击选择 “上传并部署”
 
-const cloud = require('wx-server-sdk')
+const cloud = require('wx-server-sdk');
 
 // 初始化 cloud
 cloud.init({
@@ -23,21 +23,43 @@ cloud.init({
  * 
  */
 exports.main = async (event, context) => {
-  // console.log(event,11)
-  // console.log(context,22)
   const db = cloud.database();
-  // 查询题目
-  const subjectCollection = await db.collection('subject').get()
-  // console.log(subjectCollection.data,33)
-  // 可执行其他自定义逻辑
-  // console.log 的内容可以在云开发云函数调用日志查看
-
-  // 获取 WX Context (微信调用上下文)，包括 OPENID、APPID、及 UNIONID（需满足 UNIONID 获取条件）等信息
-  const wxContext = cloud.getWXContext()
-
+  // 全局的工具类，在云函数中获取微信的调用上下文
+  const wxContext = cloud.getWXContext();
+  console.log(event.userInfo)
+  console.log(wxContext)
+  let data = null;
+  let code = 1;
+  // 云数据库操作
+  try {
+    // 实际注册功能时，应先检测该用户是否已经注册
+    // 每个人授权后openid是服务端唯一的凭证
+    const result = await db.collection('users').where({
+      openid: wxContext.OPENID
+    }).get();
+    console.log(result.data,22222)
+    if (result.data.length) {
+      // 此用户已经注册过了
+      return {
+        code,
+        data
+      }
+    } else {
+      data = await db.collection('users').add({
+        data: {
+          created: new Date(),
+          userInfo: event.userInfo,
+          openid: wxContext.OPENID
+        }
+      })
+    }
+  } catch (e) {
+    console.error(e)
+    code = 0
+  }
   return {
-    code:1,
-    data: subjectCollection.data
+    code,
+    data
   }
 }
 

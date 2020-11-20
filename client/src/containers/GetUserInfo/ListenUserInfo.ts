@@ -2,7 +2,7 @@
  * @description 监听 userInfo 的变化，构建一个监听函数
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-17 15:57:56
+ * @LastEditTime 2020-11-20 15:07:18
  * @LastEditors cq
  */
 
@@ -28,26 +28,29 @@ export default class ListenUserInfo {
     }
   }
 
-  status: ListenStatus = 'INIT';
+  status: ListenStatus = 'INIT';  //初始状态
 
   /**
-   * @author ronffy
+   * @author cq
    * @param {Function} callback 要监听的函数，当用户信息不存在时，则等待授权用户信息后，再执行该 callback
    * @param {UserInfo} userInfo 用户信息
    * @return {Function} 重新生成一个函数代替 callback。如果
    */
   createListener(callback: Function, userInfo: UserInfo) {
     return (...args) => {
+      // 用户信息存在
       if (!isEmpty(userInfo)) {
         callback(...args);
         return;
       }
       this
         .wait()
-        .then((status) => {
-          if (status !== 'DONE') {
+        .then((status) => {  
+          // 执行完等待函数看是否授权成功
+          if (status !== 'DONE') {   
             return;
           }
+          // 成功执行
           callback(...args);
         })
     }
@@ -55,16 +58,17 @@ export default class ListenUserInfo {
 
   async wait(): Promise<ListenStatus> {
     const { waitTime, oneceTime } = this.config;
-    const waitBout = waitTime / oneceTime;
+    const waitBout = waitTime / oneceTime;   //尝试次数
     let i = 0;
-    this.status = 'WAITING';
+    this.status = 'WAITING';  //等待
 
+    // 在等待的过程  如果用户点击了授权 将不再进入此循坏
     while (this.status === 'WAITING' && ++i < waitBout) {
-      await delay(oneceTime);
+      await delay(oneceTime);   //延迟函数  每次等待100ms
     }
     const status = (this.status as ListenStatus);
     if (status !== 'INIT') {
-      this.status = 'INIT';
+      this.status = 'INIT';  //20ms还不授权当授权失败处理 恢复到初始值
     }
     return status;
   }

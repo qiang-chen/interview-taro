@@ -2,7 +2,7 @@
  * @description dva redux 类型相关定义
  * @author cq
  * @Date 2020-11-17 20:22:51
- * @LastEditTime 2020-11-18 10:12:40
+ * @LastEditTime 2020-11-20 14:43:34
  * @LastEditors cq
  */
 
@@ -21,11 +21,11 @@ export interface PromiseDispatch {
 	<P extends Promise<any>, A extends ReduxAction>(action: A): P;
 }
 
-export type ReduxSagaEffects = Partial<{
+export type ReduxSagaEffects = {
 	call: <T = any>(p: (arg: T) => Promise<any>, arg?: T) => Promise<any>;
 	put: (action: ReduxAction) => void;
 	select: (state: any) => any;
-}>
+}
 
 export interface DvaModelReducer {
 	(preState: object, action: ReduxAction): object;

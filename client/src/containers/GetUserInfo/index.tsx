@@ -1,10 +1,11 @@
 /**
  * @description render 函数 获取用户信息
- * @author ronffy
- * @Date 2019-12-03 17:50:57
- * @LastEditTime 2020-11-19 14:56:56
+ * @author cq
+ * @Date 2020-11-18 13:54:35
+ * @LastEditTime 2020-11-20 17:04:28
  * @LastEditors cq
  */
+
 import Taro, { ComponentClass } from '@tarojs/taro';
 import { Button } from '@tarojs/components';
 import { connect, MapStateToProps, MapDispatchToProps } from 'react-redux';
@@ -35,9 +36,31 @@ export interface GetUserInfoProps extends GetUserInfoStateProps, GetUserInfoDisp
 
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
-const GetUserInfo: React.FC<GetUserInfoProps> = ({ userInfo, updateUserInfo, onGetUserInfo, children }) => {
-  const handleGetUserInfo = (e) => {
-  
+const GetUserInfo: React.FC<GetUserInfoProps> = ({
+  userInfo,
+  updateUserInfo,
+  onGetUserInfo,
+  children
+}) => {
+  const handleGetUserInfo = async (e) => {
+    if (!isEmpty(userInfo)) {
+      // 授权过停止
+      return;
+    }
+    const { errMsg, userInfo: nextUserInfo } = e.detail;
+    if (!errMsg.includes('getUserInfo:ok')) {
+      Taro.showToast({
+        title: '授权失败',
+        icon: 'none'
+      })
+      onGetUserInfo && onGetUserInfo();
+      return;
+    }
+    Taro.showToast({
+      title: '授权成功'
+    })
+    await updateUserInfo(nextUserInfo)
+    onGetUserInfo && onGetUserInfo(nextUserInfo);
   }
 
   return (
@@ -53,12 +76,12 @@ const mapStateToProps: MapStateToProps<GetUserInfoStateProps, GetUserInfoOwnProp
 
 const mapDispatchToProps: MapDispatchToProps<GetUserInfoDispatchProps, GetUserInfoOwnProps> = (dispatch) => {
   return {
-    // updateUserInfo(userInfo): Promise<any> {
-    //   return (dispatch as PromiseDispatch)({
-    //     type: `app/updateUserInfo`,
-    //     payload: userInfo
-    //   })
-    // },
+    updateUserInfo(userInfo): Promise<any> {
+      return (dispatch as PromiseDispatch)({
+        type: `app/updateUserInfo`,
+        payload: userInfo
+      })
+    },
   }
 }
 

@@ -3,7 +3,7 @@
  * @description 
  * @author cq
  * @Date 2020-11-17 20:02:40
- * @LastEditTime 2020-11-19 20:10:34
+ * @LastEditTime 2020-11-20 16:51:17
  * @LastEditors cq
  */
 import React from 'react'
@@ -14,7 +14,7 @@ import Taro from '@tarojs/taro'
 import './app.scss';
 
 const store = createStore()
-
+console.log(store.getState(), "store");
 class App extends React.Component {
 
   async componentDidMount() {
@@ -22,9 +22,24 @@ class App extends React.Component {
       env: 'yulin-9g6l3xz5b5e76bdd',
       traceUser: true,
     })
+
+
+
   }
 
-  componentDidShow() { }
+  async componentDidShow() {
+    // 查看是否授权  不能让用户默认授权了 好气呀～
+    const res = await Taro.getSetting();
+    if (res.authSetting['scope.userInfo']) {
+      // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+      const { userInfo } = await Taro.getUserInfo();
+      store.dispatch({
+        type: 'app/updateUserInfo',
+        payload: userInfo
+      })
+      return userInfo;
+    }
+  }
 
   componentDidHide() { }
 
