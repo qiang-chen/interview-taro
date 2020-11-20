@@ -2,7 +2,7 @@
  * @description 首页icon列表
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-20 17:04:44
+ * @LastEditTime 2020-11-20 19:47:55
  * @LastEditors cq
  */
 
@@ -14,6 +14,7 @@ import GetUserInfo from '@/containers/GetUserInfo'
 import { UserInfo } from '@/ts-types/store/AppState'
 import ListenUserInfo from '@/containers/GetUserInfo/ListenUserInfo'
 import "./index.scss"
+import isEmpty from '@/utils/isEmpty'
 
 
 type Iprops = {
@@ -43,6 +44,10 @@ function IconItem(props: Iprops) {
   }, props.userInfo)
   const { icon, content, names } = props;
   const handleGetUserInfo = (info?) => {
+    if (!isEmpty(props.userInfo)) {
+      // 授权过停止
+      return;
+    }
     // 授权失败
     if (typeof info === 'undefined') {
       listenUserInfo.fail();
@@ -50,7 +55,7 @@ function IconItem(props: Iprops) {
     }
     listenUserInfo.done();
   }
-  
+
   return (
     <GetUserInfo onGetUserInfo={handleGetUserInfo}>
       <View className='icon_item' onClick={() => skip(names)}>
