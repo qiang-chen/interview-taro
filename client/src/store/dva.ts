@@ -2,7 +2,7 @@
  * @description dva 方法
  * @author cq
  * @Date 2020-11-17 20:20:49
- * @LastEditTime 2020-11-18 10:54:20
+ * @LastEditTime 2020-11-20 15:27:41
  * @LastEditors cq
  */
 
@@ -22,8 +22,8 @@ export default function (options) {
   });
 
   // HMR workaround
-  // if (!global.registered) options.models.forEach(model => app.model(model))
-  // global.registered = true
+  if (!global.registered) options.models.forEach(model => app.model(model))
+  global.registered = true
   app.start();
 
   // eslint-disable-next-line no-underscore-dangle
@@ -36,7 +36,7 @@ export default function (options) {
   app.getStore = () => store
   app.getDispatch = () => store.dispatch
 
-  // global.__app = app;
+  global.__app = app;
 
   return app
 }

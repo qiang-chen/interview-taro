@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-19 15:18:56
+ * @LastEditTime 2020-11-20 17:01:24
  * @LastEditors cq
  */
 
@@ -53,7 +53,7 @@ const homeList = [
 
 
 
-const Home: React.FC<Iprops> = ({ }) => {
+const Home: React.FC<Iprops> = ({ userInfo }) => {
   // 点击顶部
   const handGetUserInfo = () => {
     console.log("点击顶部")
@@ -77,7 +77,12 @@ const Home: React.FC<Iprops> = ({ }) => {
     <View className='page-home'>
       <View className='home_content'>
         {homeList.map((item) => {
-          return <IconItem {...item} onChangeItem={handChangeItem} key={item.names + 'homeList'}></IconItem>
+          return <IconItem
+            {...item}
+            onChangeItem={handChangeItem}
+            key={item.names + 'homeList'}
+            userInfo={userInfo}
+          />
         })}
       </View>
     </View>
@@ -87,7 +92,7 @@ const Home: React.FC<Iprops> = ({ }) => {
 
 function mapStateToProps(state) {
   return ({
-
+    userInfo: state.app.userInfo,
   })
 }
 

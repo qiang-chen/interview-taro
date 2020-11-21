@@ -2,25 +2,27 @@
  * @description 全局的 tabBar
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-19 14:56:12
+ * @LastEditTime 2020-11-20 19:47:13
  * @LastEditors cq
  */
 
 import Taro, { ComponentClass } from '@tarojs/taro';
 import CusTabBar from '@/components/CusTabBar';
-import config from '@/config';
+import config from '@/config/index';
 import pagePath from '@/config/pagePath';
 import { connect, MapStateToProps } from 'react-redux';
-
 import GetUserInfo from '@/containers/GetUserInfo';
 import ListenUserInfo from '@/containers/GetUserInfo/ListenUserInfo';
 import React from 'react';
+import { UserInfo } from '@/ts-types/store/AppState';
+import { RootState } from '@/ts-types/store';
+
 
 const { ossOriginAddSalt } = config;
 const listenUserInfo = new ListenUserInfo();
 
 interface AppTabBarStateProps {
-  
+  userInfo: UserInfo
 }
 
 interface AppTabBarDispatchProps {
@@ -38,10 +40,16 @@ export interface AppTabBarProps extends AppTabBarStateProps, AppTabBarDispatchPr
 
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
-const AppTabBar: React.FC<AppTabBarProps> = ({ current, onClick, onClickMiddle }) => {
+const AppTabBar: React.FC<AppTabBarProps> = ({
+  current,
+  onClick,
+  onClickMiddle,
+  userInfo
+}) => {
 
 
   const handleGetUserInfo = (info?) => {
+    // 授权失败
     if (typeof info === 'undefined') {
       listenUserInfo.fail();
       return;
@@ -49,25 +57,24 @@ const AppTabBar: React.FC<AppTabBarProps> = ({ current, onClick, onClickMiddle }
     listenUserInfo.done();
   }
 
-  const handleClick=(e)=>{
+  const handleClick = listenUserInfo.createListener((e) => {
     console.log(e)
     // 02
     switch (e) {
       case 0:
-        Taro.navigateTo({ url: pagePath.home })
+        Taro.reLaunch({ url: pagePath.home })
         break;
       case 2:
-        Taro.navigateTo({ url: pagePath.mine })
+        Taro.reLaunch({ url: pagePath.mine })
         break;
       default:
         break;
     }
-  }
+  }, userInfo)
 
-  const handleClickMiddle=()=>{
-    console.log("zhongjian")
+  const handleClickMiddle = listenUserInfo.createListener(() => {
     Taro.navigateTo({ url: pagePath.questionList })
-  }
+  }, userInfo)
 
   return (
     <GetUserInfo onGetUserInfo={handleGetUserInfo}>
@@ -99,5 +106,9 @@ const AppTabBar: React.FC<AppTabBarProps> = ({ current, onClick, onClickMiddle }
   );
 }
 
-export default AppTabBar
 
+const mapStateToProps: MapStateToProps<AppTabBarStateProps, {}, {}> = ({ app }: RootState) => ({
+  userInfo: app.userInfo,
+});
+
+export default connect(mapStateToProps)(AppTabBar as any) as ComponentClass<AppTabBarOwnProps, any>
