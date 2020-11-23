@@ -1,12 +1,5 @@
-/*
- * @description 
- * @author cq
- * @Date 2020-11-19 19:55:10
- * @LastEditTime 2020-11-23 20:21:56
- * @LastEditors cq
- */
 {
-  "name": "subject",
+  "name": "uploadfile",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

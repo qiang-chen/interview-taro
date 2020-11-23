@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2020-11-23 20:10:55
+ * @LastEditTime 2020-11-23 20:30:35
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -106,14 +106,21 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
       count: 1,
       success: (res) => {
         console.log(res.tempFilePaths[0], "sucess");
-        Taro.cloud.uploadFile({
-          cloudPath: '/answer_img',
-          filePath: res.tempFilePaths[0], // 文件路径
+        const path = res.tempFilePaths[0];
+        // 把图片转码为base64
+        const fileContent = Taro.getFileSystemManager().readFileSync(path, 'base64');
+        Taro.cloud.callFunction({
+          name: 'uploadFile',
+          data: {
+            fileContent
+          }
         }).then(res => {
-          console.log(res.fileID,"res")
-        }).catch(error => {
-          // handle error
-          console.log(error,"error");
+          const { data } = res.result as any;
+          editorCtx.insertImage({
+            src: data.fileID,
+            height: '50px',
+            extClass: "img_name"
+          })
         })
       }
     })
