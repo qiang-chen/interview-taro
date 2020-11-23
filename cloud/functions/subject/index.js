@@ -2,16 +2,25 @@
  * @description 题库列表的云服务
  * @author cq
  * @Date 2020-11-19 19:54:10
- * @LastEditTime 2020-11-20 18:10:25
+ * @LastEditTime 2020-11-23 11:20:23
  * @LastEditors cq
  */
 const cloud = require('wx-server-sdk');
 cloud.init({
   // API 调用都保持和云函数当前所在环境一致
   env: "yulin-9g6l3xz5b5e76bdd"
-})
+});
+
+// 根据传入的id获取每条题库对应的用户信息
+async function getUserInfo(id, db){
+  let data = await db.collection('users').where({
+    openid: id
+  }).get();
+  return data.data[0]
+}
+
 exports.main = async (event, context) => {
-  const { keyword, page = 1, pageSize = 3 } = event;
+  const { keyword, page = 1, pageSize = 10 } = event;
   const db = cloud.database();
   let data = [];
   let code = 1;
@@ -29,7 +38,12 @@ exports.main = async (event, context) => {
         .limit(pageSize)
         .orderBy('createTime', 'desc')
         .get();
-      data = data.data
+      data = data.data;
+      // 多表查询上每条记录的用户信息
+      data.forEach(async (item)=>{
+        item.userInfo = await getUserInfo(item.user_id, db)
+      })
+
     } catch (error) {
       code = 0;
     }
@@ -41,7 +55,11 @@ exports.main = async (event, context) => {
         .limit(pageSize)
         .orderBy('createTime', 'desc')
         .get();
-      data = data.data
+      data = data.data;
+      // 多表查询上每条记录的用户信息
+      data.forEach(async (item) => {
+        item.userInfo = await getUserInfo(item.user_id, db)
+      })
     } catch (error) {
       code = 0;
     }
