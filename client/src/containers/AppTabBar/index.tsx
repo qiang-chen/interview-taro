@@ -2,7 +2,7 @@
  * @description 全局的 tabBar
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-20 19:47:13
+ * @LastEditTime 2020-11-23 10:52:56
  * @LastEditors cq
  */
 
@@ -58,8 +58,6 @@ const AppTabBar: React.FC<AppTabBarProps> = ({
   }
 
   const handleClick = listenUserInfo.createListener((e) => {
-    console.log(e)
-    // 02
     switch (e) {
       case 0:
         Taro.reLaunch({ url: pagePath.home })

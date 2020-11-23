@@ -3,7 +3,7 @@
  * @description 
  * @author cq
  * @Date 2020-11-17 20:02:40
- * @LastEditTime 2020-11-20 16:51:17
+ * @LastEditTime 2020-11-23 10:53:32
  * @LastEditors cq
  */
 import React from 'react'
@@ -14,7 +14,6 @@ import Taro from '@tarojs/taro'
 import './app.scss';
 
 const store = createStore()
-console.log(store.getState(), "store");
 class App extends React.Component {
 
   async componentDidMount() {
