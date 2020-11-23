@@ -2,7 +2,7 @@
  * @description 首页icon列表
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-20 19:47:55
+ * @LastEditTime 2020-11-23 10:44:53
  * @LastEditors cq
  */
 
@@ -57,7 +57,7 @@ function IconItem(props: Iprops) {
   }
 
   return (
-    <GetUserInfo onGetUserInfo={handleGetUserInfo}>
+    <GetUserInfo userInfo={props.userInfo} onGetUserInfo={handleGetUserInfo}>
       <View className='icon_item' onClick={() => skip(names)}>
         <View className={"icon" + " " + names}><Image src={icon} className='img' /></View>
         <View className='content'>{content}</View>

@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-20 17:01:24
+ * @LastEditTime 2020-11-23 10:36:34
  * @LastEditors cq
  */
 
@@ -20,6 +20,7 @@ import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { HomeState } from "@/ts-types/store/index";
 import React from 'react';
+import { UserInfo } from '@/ts-types/store/AppState';
 import './index.scss'
 
 
@@ -27,7 +28,7 @@ type HomeProps = {
   dispatch?: any
 }
 
-type Iprops = HomeProps & Partial<HomeState>
+type Iprops = HomeProps & Partial<HomeState> & UserInfo
 
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 

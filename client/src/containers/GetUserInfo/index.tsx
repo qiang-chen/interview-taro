@@ -2,11 +2,11 @@
  * @description render 函数 获取用户信息
  * @author cq
  * @Date 2020-11-18 13:54:35
- * @LastEditTime 2020-11-20 17:04:28
+ * @LastEditTime 2020-11-23 10:42:33
  * @LastEditors cq
  */
 
-import Taro, { ComponentClass } from '@tarojs/taro';
+import Taro, { clearStorage, ComponentClass } from '@tarojs/taro';
 import { Button } from '@tarojs/components';
 import { connect, MapStateToProps, MapDispatchToProps } from 'react-redux';
 import { RootState } from '@/ts-types/store';
