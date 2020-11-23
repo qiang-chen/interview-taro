@@ -5,7 +5,7 @@
   "description": "interview",
   "appid": "wxde0ff95399f86e89",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": false,
     "postcss": false,
@@ -41,5 +41,24 @@
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
-  "condition": {}
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "childPages/QuestionInput/index",
+          "pathName": "childPages/QuestionInput/index",
+          "scene": null
+        }
+      ]
+    }
+  }
 }

@@ -2,7 +2,7 @@
  * @description 登陆相关操作
  * @author cq
  * @Date 2020-11-19 14:21:46
- * @LastEditTime 2020-11-23 11:27:26
+ * @LastEditTime 2020-11-23 15:05:44
  * @LastEditors cq
  */
 // 云函数模板
@@ -25,7 +25,7 @@ cloud.init({
 exports.main = async (event, context) => {
   const db = cloud.database();
   // 全局的工具类，在云函数中获取微信的调用上下文
-  const wxContext = cloud.getWXContext();
+  const wxContext =await cloud.getWXContext();
   console.log(event.userInfo)
   console.log(wxContext)
   let data = null;
