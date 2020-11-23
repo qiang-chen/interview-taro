@@ -2,7 +2,7 @@
  * @description 登陆相关操作
  * @author cq
  * @Date 2020-11-19 14:21:46
- * @LastEditTime 2020-11-23 11:08:40
+ * @LastEditTime 2020-11-23 11:27:26
  * @LastEditors cq
  */
 // 云函数模板
@@ -49,7 +49,8 @@ exports.main = async (event, context) => {
         data: {
           created: new Date(),
           userInfo: event.userInfo,
-          openid: wxContext.OPENID
+          openid: wxContext.OPENID,
+          integral:0
         }
       })
     }
