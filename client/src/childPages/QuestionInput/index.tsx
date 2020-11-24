@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2020-11-23 20:30:35
+ * @LastEditTime 2020-11-23 20:36:19
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -86,7 +86,6 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
 
   // 插入图片
   const insertImage = () => {
-
     editorCtx.insertImage({
       // 妈卖批 https协议的还不能上传
       src: "http://img.sunlands.wang/addSalt/img/1.0/home/inputVoucher.png",
@@ -100,9 +99,6 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
   // 向云服务器上传图片
   const uploadFile = () => {
     Taro.chooseImage({
-      complete: (res) => {
-        console.log(res);
-      },
       count: 1,
       success: (res) => {
         console.log(res.tempFilePaths[0], "sucess");
