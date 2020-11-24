@@ -121,7 +121,7 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
   const handSubmit = async () => {
     console.log(await editorCtx.getContents());
     const content = (await editorCtx.getContents()).delta
-    console.log(titleValue, content,selectorChecked);
+    console.log(titleValue, content, selectorChecked);
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'saveQuestion',
@@ -152,8 +152,24 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
         题库录入
         </View>
     </CusNavBar>
+    <View className='page-section'>
+      <View>
+        <Picker
+          mode='selector'
+          range={selector}
+          onChange={handPickerChange}
+        >
+          <AtList>
+            <AtListItem
+              title='题目分类'
+              extraText={selectorChecked}
+            />
+          </AtList>
+        </Picker>
+      </View>
+    </View>
     <View className='page-home'>
-      QuestionInput
+      {/* QuestionInput */}
       <Input
         type='text'
         placeholder='请输入题目'
@@ -168,27 +184,11 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
         onBlur={handBlur}
         onReady={handReady}
       />
-     
+
       <Button type='warn' onClick={undo}>回到答案上一步</Button>
       <Button onClick={clear}>清空答案</Button>
       <Button onClick={uploadFile}>云储存图片</Button>
-      <View className='page-section'>
-        <Text>题目分类选择</Text>
-        <View>
-          <Picker
-            mode='selector'
-            range={selector}
-            onChange={handPickerChange}
-          >
-            <AtList>
-              <AtListItem
-                title='题目分类'
-                extraText={selectorChecked}
-              />
-            </AtList>
-          </Picker>
-        </View>
-      </View>
+
       <Button onClick={handSubmit}>提交</Button>
     </View>
   </PageBarRoot>

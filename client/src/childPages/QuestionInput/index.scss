@@ -1,0 +1,32 @@
+.page-section {
+    padding: 10px 20px 0;
+}
+
+.page-home {
+    padding: 0 20px;
+    background: #f7f7f7;
+}
+.page-home input {
+    color: #666;
+    padding: 20px 20px;
+    font-weight: 600;
+    font-size: 30px;
+}
+
+.page-home .editor {
+    padding: 0 20px;
+    color: #666;
+    font-size: 28px;
+}
+
+.item-extra .item-extra__info {
+    min-width: 100px;
+    height: 46px;
+    background-color: rgb(51, 153, 255);
+    color: #fff;
+    border-radius: 50px;
+    line-height: 45px;
+    text-align: center;
+    font-size: 28px;
+    padding: 0 15px;
+}
