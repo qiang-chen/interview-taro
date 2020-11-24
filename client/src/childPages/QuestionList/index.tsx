@@ -3,13 +3,13 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-19 20:14:56
+ * @LastEditTime 2020-11-24 16:44:47
  * @LastEditors cq
  */
 
 
 import Taro from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text, Image, Editor } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
@@ -18,7 +18,8 @@ import { AtFloatLayout, AtSwipeAction, AtModal, AtToast } from 'taro-ui'
 import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { HomeState } from "@/ts-types/store/index";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import ShowView from "./component/ShowView"
 import './index.scss'
 
 
@@ -34,6 +35,7 @@ const namespace = 'home';
 
 
 const Home: React.FC<Iprops> = ({ }) => {
+  const [subjectList, setSubjectList] = useState([]) as any
 
   const handleClickTitle = () => {
     console.log("点击首页标题")
@@ -50,11 +52,12 @@ const Home: React.FC<Iprops> = ({ }) => {
     }).then(res => {
       const { result } = res;
       const { code, data } = result as any;
-      if(!code){
+      if (!code) {
         console.log("服务器错误");
-        return 
+        return
       }
       console.log(data);
+      setSubjectList(data)
     })
   }, [])
 
@@ -62,6 +65,7 @@ const Home: React.FC<Iprops> = ({ }) => {
   const handleClickBack = () => {
     Taro.navigateBack();
   }
+
   return <PageBarRoot hasTabBar>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
@@ -72,6 +76,12 @@ const Home: React.FC<Iprops> = ({ }) => {
     <View className='page-home'>
       QuestionList
     </View>
+
+    {subjectList.length ? <ShowView
+      subjectList={subjectList}
+    />:"暂无数据"}
+    
+
   </PageBarRoot>
 }
 

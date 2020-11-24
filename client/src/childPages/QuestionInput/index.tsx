@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2020-11-23 20:36:19
+ * @LastEditTime 2020-11-24 16:46:26
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -10,12 +10,12 @@
 
 
 import Taro from '@tarojs/taro'
-import { View, Text, Image, Editor, Button, RichText } from '@tarojs/components'
+import { View, Text, Image, Editor, Button, RichText, Input, Picker } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
 import PageBarRoot from '@/containers/PageBarRoot';
-import { AtFloatLayout, AtSwipeAction, AtModal, AtToast } from 'taro-ui'
+import { AtFloatLayout, AtSwipeAction, AtModal, AtToast, AtList, AtListItem } from 'taro-ui'
 import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { HomeState } from "@/ts-types/store";
@@ -37,8 +37,11 @@ const namespace = 'questionInput';
 
 const QuestionInput: React.FC<Iprops> = ({ }) => {
 
-  const [editorCtx, setEditorCtx] = useState(null);
+  const [editorCtx, setEditorCtx] = useState(null) as any;
   // const [editorCtx, seteditorCtx]
+  const [titleValue, setTitleValue] = useState("");
+  const selector = ["vue", "react", "js", "node", "php", "java", "暂无匹配"]
+  const [selectorChecked, setSelectorChecked] = useState("暂无匹配"); //上拉菜单的默认选择
 
   const handleClickTitle = () => {
     console.log("点击首页标题")
@@ -48,6 +51,7 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
   const handleClickBack = () => {
     Taro.navigateBack();
   }
+
   useEffect(() => {
     const query = Taro.createSelectorQuery()
     query.select('#editor').boundingClientRect()
@@ -78,22 +82,8 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
     }).exec()
   }
   // 清空
-
   const clear = () => {
-    console.log(editorCtx, 111);
     editorCtx.clear()
-  }
-
-  // 插入图片
-  const insertImage = () => {
-    editorCtx.insertImage({
-      // 妈卖批 https协议的还不能上传
-      src: "http://img.sunlands.wang/addSalt/img/1.0/home/inputVoucher.png",
-      // src: 'http://www.baidu.com/s?wd=%E7%BE%8E%E5%A5%B3%E5%9B%BE%E7%89%87%E5%BA%93&usm=2&ie=utf-8&rsv_cq=%E5%9B%BE%E7%89%87&rsv_dl=0_right_recommends_merge_20826&euri=2853269',
-      width: '100px',
-      height: '50px',
-      extClass: "img_name"
-    })
   }
 
   // 向云服务器上传图片
@@ -122,6 +112,38 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
     })
 
   }
+  // 标题的选择
+  const handInput = (e) => {
+    setTitleValue(e.detail.value)
+  }
+
+  // 提交
+  const handSubmit = async () => {
+    console.log(await editorCtx.getContents());
+    const content = (await editorCtx.getContents()).delta
+    console.log(titleValue, content,selectorChecked);
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'saveQuestion',
+      // 传递给云函数的event参数
+      data: {
+        title: titleValue,
+        content,
+        subject_type: selectorChecked
+      }
+    }).then(res => {
+      const { result } = res;
+      const { code } = result as any;
+      if (!code) {
+        console.log("服务器错误");
+        return
+      }
+    })
+  }
+
+  const handPickerChange = (e) => {
+    setSelectorChecked(selector[e.detail.value])
+  }
 
   return <PageBarRoot hasTabBar>
     {/* navBar */}
@@ -132,6 +154,12 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
     </CusNavBar>
     <View className='page-home'>
       QuestionInput
+      <Input
+        type='text'
+        placeholder='请输入题目'
+        value={titleValue}
+        onInput={handInput}
+      />
       <Editor
         id='editor'
         className='editor'
@@ -140,10 +168,28 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
         onBlur={handBlur}
         onReady={handReady}
       />
-      <Button type='warn' onClick={undo}>撤销</Button>
-      <Button onClick={clear}>清空</Button>
-      <Button onClick={insertImage}>点击插入图片</Button>
+     
+      <Button type='warn' onClick={undo}>回到答案上一步</Button>
+      <Button onClick={clear}>清空答案</Button>
       <Button onClick={uploadFile}>云储存图片</Button>
+      <View className='page-section'>
+        <Text>题目分类选择</Text>
+        <View>
+          <Picker
+            mode='selector'
+            range={selector}
+            onChange={handPickerChange}
+          >
+            <AtList>
+              <AtListItem
+                title='题目分类'
+                extraText={selectorChecked}
+              />
+            </AtList>
+          </Picker>
+        </View>
+      </View>
+      <Button onClick={handSubmit}>提交</Button>
     </View>
   </PageBarRoot>
 }
