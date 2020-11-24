@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-24 16:44:47
+ * @LastEditTime 2020-11-24 21:16:08
  * @LastEditors cq
  */
 
@@ -19,7 +19,8 @@ import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { HomeState } from "@/ts-types/store/index";
 import React, { useEffect, useState } from 'react';
-import ShowView from "./component/ShowView"
+import ShowAnswerView from "./component/showAnswerView/index"
+import ShowTitleView from "./component/ShowTitleView"
 import './index.scss'
 
 
@@ -77,11 +78,21 @@ const Home: React.FC<Iprops> = ({ }) => {
       QuestionList
     </View>
 
-    {subjectList.length ? <ShowView
-      subjectList={subjectList}
-    />:"暂无数据"}
-    
-
+    {subjectList.map((item,index) => {
+      if (item.content) {
+        return <>
+          第{index}题、  题目分类 {item.subject_type}  创建时间 {item.createTime}
+          <ShowTitleView
+            title={item.title}
+          />
+          <ShowAnswerView
+            answer={item}
+          />
+        </>
+      } else {
+        return "暂无数据"
+      }
+    })}
   </PageBarRoot>
 }
 
