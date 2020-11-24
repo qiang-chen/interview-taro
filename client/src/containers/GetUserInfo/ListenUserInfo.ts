@@ -2,7 +2,7 @@
  * @description 监听 userInfo 的变化，构建一个监听函数
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-23 10:38:31
+ * @LastEditTime 2020-11-24 11:27:32
  * @LastEditors cq
  */
 
@@ -34,7 +34,7 @@ export default class ListenUserInfo {
    * @author cq
    * @param {Function} callback 要监听的函数，当用户信息不存在时，则等待授权用户信息后，再执行该 callback
    * @param {UserInfo} userInfo 用户信息
-   * @return {Function} 重新生成一个函数代替 callback。如果
+   * @return {Function} 重新生成一个函数代替 callback
    */
   createListener(callback: Function, userInfo: UserInfo) {
     return (...args) => {

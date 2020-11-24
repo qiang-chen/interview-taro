@@ -2,7 +2,7 @@
  * @description 首页icon列表
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-23 10:44:53
+ * @LastEditTime 2020-11-23 14:04:47
  * @LastEditors cq
  */
 
@@ -30,7 +30,7 @@ function IconItem(props: Iprops) {
   const skip = listenUserInfo.createListener((names) => {
     switch (names) {
       case "bs1":
-        Taro.navigateTo({ url: pagePath.questionList })
+        Taro.navigateTo({ url: pagePath.questionInput })
         break;
       case "bs2":
         Taro.navigateTo({ url: pagePath.questionList })
