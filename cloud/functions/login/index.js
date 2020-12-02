@@ -2,7 +2,7 @@
  * @description 登陆相关操作
  * @author cq
  * @Date 2020-11-19 14:21:46
- * @LastEditTime 2020-11-23 15:05:44
+ * @LastEditTime 2020-12-02 18:10:35
  * @LastEditors cq
  */
 // 云函数模板
@@ -41,6 +41,13 @@ exports.main = async (event, context) => {
     console.log(result.data,22222)
     if (result.data.length) {
       // 此用户已经注册过了
+      db.collection('users').where({
+        openid: wxContext.OPENID
+      }).update({
+        data: {
+          userInfo: event.userInfo,
+        }
+      })
       return {
         code,
         data
