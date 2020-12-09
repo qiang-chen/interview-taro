@@ -2,7 +2,7 @@
  * @description 监听 userInfo 的变化，构建一个监听函数
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-24 11:27:32
+ * @LastEditTime 2020-12-09 15:55:07
  * @LastEditors cq
  */
 
@@ -39,7 +39,6 @@ export default class ListenUserInfo {
   createListener(callback: Function, userInfo: UserInfo) {
     return (...args) => {
       // 用户信息存在
-      console.log(userInfo, !isEmpty(userInfo),'createListener')
       if (!isEmpty(userInfo)) {
         callback(...args);
         return;
