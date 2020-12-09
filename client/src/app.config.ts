@@ -2,7 +2,7 @@
  * @description 
  * @author cq
  * @Date 2020-11-17 20:02:40
- * @LastEditTime 2020-12-08 18:14:52
+ * @LastEditTime 2020-12-09 16:29:57
  * @LastEditors cq
  */
 export default {
@@ -19,6 +19,7 @@ export default {
         'QuestionList/index',//题库列表
         'Forum/index',//论坛
         'QuestionInput/index',//题库录入
+        'Contact/index'
       ],
     }
   ],
