@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-09 15:56:30
+ * @LastEditTime 2020-12-09 16:12:52
  * @LastEditors cq
  */
 
@@ -22,6 +22,7 @@ import { HomeState } from "@/ts-types/store/index";
 import React from 'react';
 import { UserInfo } from '@/ts-types/store/AppState';
 import './index.scss'
+import CusShare from '@/components/CusShare';
 
 
 type HomeProps = {
@@ -70,23 +71,25 @@ const Home: React.FC<Iprops> = ({ userInfo }) => {
 
   return <PageBarRoot hasTabBar>
     {/* navBar */}
-    <CusNavBar>
-      <View onClick={handleClickTitle}>
-        首页
+    <CusShare>
+      <CusNavBar>
+        <View onClick={handleClickTitle}>
+          首页
         </View>
-    </CusNavBar>
-    <View className='page-home'>
-      <View className='home_content'>
-        {homeList.map((item) => {
-          return <IconItem
-            {...item}
-            onChangeItem={handChangeItem}
-            key={item.names + 'homeList'}
-            userInfo={userInfo}
-          />
-        })}
+      </CusNavBar>
+      <View className='page-home'>
+        <View className='home_content'>
+          {homeList.map((item) => {
+            return <IconItem
+              {...item}
+              onChangeItem={handChangeItem}
+              key={item.names + 'homeList'}
+              userInfo={userInfo}
+            />
+          })}
+        </View>
       </View>
-    </View>
+    </CusShare>
     <AppTabBar current={1} />
   </PageBarRoot>
 }

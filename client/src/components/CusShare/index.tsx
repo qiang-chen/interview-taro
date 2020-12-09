@@ -2,7 +2,7 @@
  * @description 分享拦截
  * @author cq
  * @Date 2020-12-09 14:07:14
- * @LastEditTime 2020-12-09 16:05:38
+ * @LastEditTime 2020-12-09 16:21:20
  * @LastEditors cq
  */
 import React, { useEffect } from 'react';
@@ -21,7 +21,6 @@ interface IProps {
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
 const CusShare: React.FC<IProps> = ({ children }) => {
-
   useShareAppMessage(res => {
     console.log(res, 111);
     Taro.cloud.callFunction({
@@ -54,6 +53,14 @@ const CusShare: React.FC<IProps> = ({ children }) => {
   })
 
   useShareTimeline(() => {
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'updateIntegral',
+      data: {
+        integral: 1,
+        type: "add"
+      }
+    })
     console.log('useShareTimeline');
     return {
       title: '玉麟宝典，你值得拥有',
@@ -63,11 +70,12 @@ const CusShare: React.FC<IProps> = ({ children }) => {
   })
 
   return (
-    <View>
+    <>
       {
         children
       }
-    </View>
+    </>
+    
   );
 }
 
