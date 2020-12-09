@@ -3,7 +3,7 @@
  * @description 
  * @author cq
  * @Date 2020-11-17 20:02:40
- * @LastEditTime 2020-11-23 10:53:32
+ * @LastEditTime 2020-12-08 18:10:10
  * @LastEditors cq
  */
 import React from 'react'
@@ -21,9 +21,6 @@ class App extends React.Component {
       env: 'yulin-9g6l3xz5b5e76bdd',
       traceUser: true,
     })
-
-
-
   }
 
   async componentDidShow() {

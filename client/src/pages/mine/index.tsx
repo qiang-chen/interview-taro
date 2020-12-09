@@ -2,22 +2,23 @@
  * @description 我的 页面
  * @author ronffy
  * @Date 2019-12-09 16:25:35
- * @LastEditTime 2020-11-19 14:55:25
+ * @LastEditTime 2020-12-09 14:14:51
  * @LastEditors cq
  */
 import React from 'react';
-import Taro, { ComponentClass } from '@tarojs/taro'
+import Taro, { ComponentClass, useShareAppMessage } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar';
 import CusList from '@/components/CusList';
 import CusListItem from '@/components/CusList/CusListItem';
 import { connect, MapStateToProps } from 'react-redux'
-import config from '@/config';
+import config from '@/config/index';
 import { RootState } from '@/ts-types/store';
 import { UserInfo } from '@/ts-types/store/AppState';
 import CusNavBar from '@/components/CusNavBar';
 import PageBarRoot from '@/containers/PageBarRoot';
 import pagePath from '@/config/pagePath';
+import CusShare from "@/components/CusShare"
 import './index.scss'
 
 
@@ -40,24 +41,26 @@ export interface MineProps extends MineStateProps {
 
 const Mine: React.FC<MineProps> = ({ userInfo }) => {
 
-
   return (
     <PageBarRoot hasTabBar>
-      {/* navBar */}
-      <CusNavBar>我的</CusNavBar>
+      <CusShare>
+        {/* navBar */}
+        <CusNavBar>我的</CusNavBar>
 
-      <View className='page-mine'>
-
+        <View className='page-mine'>
+          <Button
+            openType="share"
+            title="分享标题"
+            imgUrl="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1607425814349&di=06c53b263717c0104340b76202d0d2e3&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201201%2F21%2F20120121221819_xVua5.jpg"
+          >分享好友</Button>
       wode
       </View>
-
+      </CusShare>
       {/* tabBar */}
       <AppTabBar current={3} />
     </PageBarRoot>
   );
 }
-
-
 
 
 export default Mine
