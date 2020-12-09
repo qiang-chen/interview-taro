@@ -2,7 +2,7 @@
  * @description 分享拦截
  * @author cq
  * @Date 2020-12-09 14:07:14
- * @LastEditTime 2020-12-09 15:57:42
+ * @LastEditTime 2020-12-09 16:05:38
  * @LastEditors cq
  */
 import React, { useEffect } from 'react';
@@ -27,7 +27,10 @@ const CusShare: React.FC<IProps> = ({ children }) => {
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'updateIntegral',
-      data: { integral:1 }
+      data: {
+        integral: 1,
+        type: "add"
+      }
     })
     if (res.from === 'button') {
       // 来自页面内转发按钮

@@ -2,7 +2,7 @@
  * @description 更新积分
  * @author cq
  * @Date 2020-12-09 15:47:37
- * @LastEditTime 2020-12-09 15:59:25
+ * @LastEditTime 2020-12-09 16:05:13
  * @LastEditors cq
  */
 
@@ -28,7 +28,7 @@ exports.main = async (event, context) => {
   const db = cloud.database();
   // 全局的工具类，在云函数中获取微信的调用上下文
   const wxContext = await cloud.getWXContext();
-  const { integral } = event;
+  const { integral, type } = event;
   console.log(integral)
   let data = null;
   let code = 1;
@@ -38,17 +38,34 @@ exports.main = async (event, context) => {
     const result = await db.collection('users').where({
       openid: wxContext.OPENID
     }).get();
-
-    db.collection('users').where({
-      openid: wxContext.OPENID
-    }).update({
-      data: {
-        integral: result.data[0].integral * 1 + integral
+    if (type == "reduce") {
+      // 减法
+      if (result.data[0].integral * 1 - integral < 0) {
+        return {
+          code: 0,
+          data: "积分不足"
+        }
       }
-    })
+      db.collection('users').where({
+        openid: wxContext.OPENID
+      }).update({
+        data: {
+          integral: result.data[0].integral * 1 - integral
+        }
+      })
+    } else if (type == "add") {
+      db.collection('users').where({
+        openid: wxContext.OPENID
+      }).update({
+        data: {
+          integral: result.data[0].integral * 1 + integral
+        }
+      })
+    }
+
   } catch (e) {
     console.error(e)
-    data=e;
+    data = e;
     code = 0
   }
   return {
