@@ -3,7 +3,7 @@
  * @description app model，公共 state 在这里面定义、处理
  * @author cq
  * @Date 2020-11-17 20:28:36
- * @LastEditTime 2020-11-20 15:33:13
+ * @LastEditTime 2020-12-17 16:10:13
  * @LastEditors cq
  */
 
@@ -19,6 +19,7 @@ export default modelExtend<AppState>({
   namespace,
   state: {
     userInfo: ({} as UserInfo),
+    openid:""
   },
   effects: {
     *updateUserInfo({ payload }: ReduxAction, { put }: ReduxSagaEffects) {
@@ -30,11 +31,19 @@ export default modelExtend<AppState>({
         }
       })
 
-      yield Taro.cloud.callFunction({
+      const { code,openid}=yield Taro.cloud.callFunction({
         // 要调用的云函数名称
         name: 'login',
         data: { userInfo }
       })
+      if (code){
+        yield put({
+          type: 'updateState',
+          payload: {
+            openid
+          },
+        });
+      }
     }
   }
 });

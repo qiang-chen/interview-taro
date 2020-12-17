@@ -2,7 +2,7 @@
  * @description 题库列表的云服务
  * @author cq
  * @Date 2020-11-19 19:54:10
- * @LastEditTime 2020-11-23 20:16:33
+ * @LastEditTime 2020-12-17 16:36:19
  * @LastEditors cq
  */
 const cloud = require('wx-server-sdk');
@@ -12,15 +12,24 @@ cloud.init({
 });
 
 // 根据传入的id获取每条题库对应的用户信息
-async function getUserInfo(id, db){
+async function getUserInfo(id, db) {
   let data = await db.collection('users').where({
     openid: id
   }).get();
   return data.data[0]
 }
 
+// 根据传入的id获取每条题库对应的点赞信息
+async function getThumbs(id, db) {
+  let data = await db.collection('thumbs').where({
+    questionId: id
+  }).get();
+  return data.data
+}
+
 exports.main = async (event, context) => {
   const { keyword, page = 1, pageSize = 10 } = event;
+  const wxContext = await cloud.getWXContext();
   const db = cloud.database();
   let data = [];
   let code = 1;
@@ -28,7 +37,6 @@ exports.main = async (event, context) => {
     // console.log(keyword)
     // const reg = RegExp(keyword, 'i');
     try {
-
       data = await db.collection('subject').where({
         title: db.RegExp({
           regexp: keyword,
@@ -39,15 +47,16 @@ exports.main = async (event, context) => {
         .orderBy('createTime', 'desc')
         .get();
       data = data.data;
-      // 多表查询上每条记录的用户信息
-      data.forEach(async (item)=>{
+      // 多表查询上每条记录的用户信息和点赞信息
+      data.forEach(async (item) => {
         item.userInfo = await getUserInfo(item.user_id, db)
+        item.thumbs = await getThumbs(item._id, db);
+        item.isDisable = item.thumbs.some(item => item.openid == wxContext.OPENID);
       })
 
     } catch (error) {
       code = 0;
     }
-    // console.log(data)
   } else {
     try {
       data = await db.collection('subject')
@@ -59,12 +68,16 @@ exports.main = async (event, context) => {
       // 多表查询上每条记录的用户信息
       data.forEach(async (item) => {
         item.userInfo = await getUserInfo(item.user_id, db)
+        item.thumbs = await getThumbs(item._id, db)
+        item.isDisable = item.thumbs.some(item => item.openid == wxContext.OPENID);
       })
+      console.log(data,123)
     } catch (error) {
       code = 0;
     }
     // 查询所有题目题目
   }
+  console.log(data, 456)
 
   return {
     code,

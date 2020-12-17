@@ -3,13 +3,13 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-11-24 21:16:08
+ * @LastEditTime 2020-12-17 16:31:11
  * @LastEditors cq
  */
 
 
 import Taro from '@tarojs/taro'
-import { View, Text, Image, Editor } from '@tarojs/components'
+import { View, Text, Image, Editor, Button } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
@@ -21,6 +21,7 @@ import { HomeState } from "@/ts-types/store/index";
 import React, { useEffect, useState } from 'react';
 import ShowAnswerView from "./component/showAnswerView/index"
 import ShowTitleView from "./component/ShowTitleView"
+import { UserInfo } from '@/ts-types/store/AppState';
 import './index.scss'
 
 
@@ -28,15 +29,15 @@ type HomeProps = {
   dispatch?: any
 }
 
-type Iprops = HomeProps & Partial<HomeState>
+type Iprops = HomeProps & Partial<HomeState> & Partial<UserInfo>
 
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
 const namespace = 'home';
 
 
-const Home: React.FC<Iprops> = ({ }) => {
-  const [subjectList, setSubjectList] = useState([]) as any
+const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
+  const [subjectList, setSubjectList] = useState([]) as any;
 
   const handleClickTitle = () => {
     console.log("点击首页标题")
@@ -67,6 +68,28 @@ const Home: React.FC<Iprops> = ({ }) => {
     Taro.navigateBack();
   }
 
+  // 点赞
+  const handFabulous = (questionId) => {
+    // 
+    console.log(11);
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'thumbs',
+      // 传递给云函数的event参数
+      data: {
+        userInfo,
+        questionId,
+      }
+    }).then(res => {
+      const { result } = res;
+      const { code } = result as any;
+      if (!code) {
+        console.log("服务器错误");
+        return
+      }
+    })
+  }
+
   return <PageBarRoot hasTabBar>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
@@ -78,7 +101,7 @@ const Home: React.FC<Iprops> = ({ }) => {
       QuestionList
     </View>
 
-    {subjectList.map((item,index) => {
+    {subjectList.map((item, index) => {
       if (item.content) {
         return <>
           第{index}题、  题目分类 {item.subject_type}  创建时间 {item.createTime}
@@ -88,6 +111,7 @@ const Home: React.FC<Iprops> = ({ }) => {
           <ShowAnswerView
             answer={item}
           />
+          <Button disabled={item.isDisable} onClick={() => handFabulous(item._id)}>点赞</Button>
         </>
       } else {
         return "暂无数据"
@@ -98,7 +122,8 @@ const Home: React.FC<Iprops> = ({ }) => {
 
 function mapStateToProps(state) {
   return ({
-
+    userInfo: state.app.userInfo,
+    openid: state.app.openid
   })
 }
 
