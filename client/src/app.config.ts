@@ -19,7 +19,8 @@ export default {
         'QuestionList/index',//题库列表
         'Forum/index',//论坛
         'QuestionInput/index',//题库录入
-        'Contact/index'
+        'Contact/index',//个人联系方式页面
+        'QuestionDetail/index',//题库详情页面
       ],
     }
   ],

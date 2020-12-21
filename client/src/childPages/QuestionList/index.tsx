@@ -3,13 +3,13 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-21 19:50:21
+ * @LastEditTime 2020-12-21 20:30:50
  * @LastEditors cq
  */
 
 
 import Taro from '@tarojs/taro'
-import { View, Text, Image, Editor, Button } from '@tarojs/components'
+import { View, Text, Image, Editor, Button, Input } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
@@ -22,6 +22,7 @@ import React, { useEffect, useState } from 'react';
 import ShowAnswerView from "./component/showAnswerView/index"
 import ShowTitleView from "./component/ShowTitleView"
 import { UserInfo } from '@/ts-types/store/AppState';
+import pagePath from '@/config/pagePath';
 import './index.scss'
 
 
@@ -64,7 +65,9 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
 
   // 返回上一级
   const handleClickBack = () => {
-    Taro.navigateBack();
+    Taro.redirectTo({
+      url: pagePath.home
+    })
   }
 
   // 点赞
@@ -87,6 +90,10 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         return
       }
     })
+  }
+
+  const handDetail=()=>{
+    Taro.navigateTo({ url: pagePath.questionDetail })
   }
 
   return <PageBarRoot hasTabBar>
@@ -118,6 +125,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
             </View>
 
             <Button disabled={item.isDisable} onClick={() => handFabulous(item._id)}>点赞</Button>
+            <Button onClick={() => handDetail(item._id)}>点击进入详情</Button>
           </>
         } else {
           return "暂无数据"
