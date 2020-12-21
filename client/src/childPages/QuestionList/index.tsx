@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-17 16:31:11
+ * @LastEditTime 2020-12-21 16:49:47
  * @LastEditors cq
  */
 
@@ -58,7 +58,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         console.log("服务器错误");
         return
       }
-      console.log(data);
+      console.log(data[1].thumbs);
       setSubjectList(data)
     })
   }, [])
