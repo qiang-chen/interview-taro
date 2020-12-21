@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-21 16:49:47
+ * @LastEditTime 2020-12-21 19:50:21
  * @LastEditors cq
  */
 
@@ -58,7 +58,6 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         console.log("服务器错误");
         return
       }
-      console.log(data[1].thumbs);
       setSubjectList(data)
     })
   }, [])
@@ -98,25 +97,33 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         </View>
     </CusNavBar>
     <View className='page-home'>
-      QuestionList
-    </View>
+      {subjectList.map((item, index) => {
+        if (item.content) {
+          return <>
+            第{index}题、  题目分类 {item.subject_type}  创建时间 {item.createTime}
+            <ShowTitleView
+              title={item.title}
+            />
+            <ShowAnswerView
+              answer={item}
+            />
+            <View>
+              点赞的用户头像列表
+            {
+                item.thumbs.map(el => <Image
+                  src={el.userInfo.avatarUrl}
+                  style='width: 50px;height: 50px;'
+                />)
+              }
+            </View>
 
-    {subjectList.map((item, index) => {
-      if (item.content) {
-        return <>
-          第{index}题、  题目分类 {item.subject_type}  创建时间 {item.createTime}
-          <ShowTitleView
-            title={item.title}
-          />
-          <ShowAnswerView
-            answer={item}
-          />
-          <Button disabled={item.isDisable} onClick={() => handFabulous(item._id)}>点赞</Button>
-        </>
-      } else {
-        return "暂无数据"
-      }
-    })}
+            <Button disabled={item.isDisable} onClick={() => handFabulous(item._id)}>点赞</Button>
+          </>
+        } else {
+          return "暂无数据"
+        }
+      })}
+    </View>
   </PageBarRoot>
 }
 
