@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-21 20:30:50
+ * @LastEditTime 2020-12-22 11:26:43
  * @LastEditors cq
  */
 
@@ -59,6 +59,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         console.log("服务器错误");
         return
       }
+      console.log(data,123);
       setSubjectList(data)
     })
   }, [])
@@ -92,7 +93,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
     })
   }
 
-  const handDetail=()=>{
+  const handDetail=(id)=>{
     Taro.navigateTo({ url: pagePath.questionDetail })
   }
 
@@ -117,7 +118,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
             <View>
               点赞的用户头像列表
             {
-                item.thumbs.map(el => <Image
+                item.thumbs&&item.thumbs.map(el => <Image
                   src={el.userInfo.avatarUrl}
                   style='width: 50px;height: 50px;'
                 />)
