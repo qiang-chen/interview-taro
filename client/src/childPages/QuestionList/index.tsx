@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-22 11:26:43
+ * @LastEditTime 2020-12-22 16:44:44
  * @LastEditors cq
  */
 
@@ -94,7 +94,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   }
 
   const handDetail=(id)=>{
-    Taro.navigateTo({ url: pagePath.questionDetail })
+    Taro.navigateTo({ url: `${pagePath.questionDetail}?id=${id}` })
   }
 
   return <PageBarRoot hasTabBar>

@@ -2,14 +2,14 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-21 20:29:38
+ * @LastEditTime 2020-12-22 16:56:13
  * @LastEditors cq
  */
 
 
 
 
-import Taro from '@tarojs/taro'
+import Taro, { useRouter } from '@tarojs/taro'
 import { View, Text, Image, Editor, Button, Input } from '@tarojs/components'
 import React, { useEffect, useState } from 'react';
 import { UserInfo } from '@/ts-types/store/AppState';
@@ -32,8 +32,31 @@ type Iprops = QuestionDetailProps & Partial<UserInfo>
 const QuestionDetail: React.FC<Iprops> = ({ }) => {
 
   const [comment, setComment] = useState("");
+  const [detailObj, setDetailObj] = useState({});
 
+  const router = useRouter();
 
+  useEffect(() => {
+    console.log(router);
+    const { id } = router.params;
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'subjectDetail',
+      // 传递给云函数的event参数
+      data: {
+        id
+      }
+    }).then(res => {
+      const { result } = res;
+      const { code, data } = result as any;
+      if (!code) {
+        console.log("服务器错误");
+        return
+      }
+      setDetailObj(data)
+    })
+  }, [])
+  
   // 提交评论
   const handComment = (questionId) => {
     console.log(questionId);
