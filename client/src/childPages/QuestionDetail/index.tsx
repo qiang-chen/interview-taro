@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-22 16:56:13
+ * @LastEditTime 2020-12-22 17:41:40
  * @LastEditors cq
  */
 
@@ -33,12 +33,12 @@ const QuestionDetail: React.FC<Iprops> = ({ }) => {
 
   const [comment, setComment] = useState("");
   const [detailObj, setDetailObj] = useState({});
-
   const router = useRouter();
+  const { id } = router.params;
 
   useEffect(() => {
     console.log(router);
-    const { id } = router.params;
+
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'subjectDetail',
@@ -56,10 +56,45 @@ const QuestionDetail: React.FC<Iprops> = ({ }) => {
       setDetailObj(data)
     })
   }, [])
-  
+
   // 提交评论
-  const handComment = (questionId) => {
-    console.log(questionId);
+  const handComment = () => {
+    // questionId 当前题目id  和当前评论ID  判断是不是第一层的
+
+    if (!comment) {
+      Taro.showToast({
+        title: '评论内容不能为空',
+        icon: 'none'
+      })
+      return
+    }
+
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'saveComment',
+      // 传递给云函数的event参数
+      data: {
+        questionId: id,
+        text: comment,
+        commentId: ""
+      }
+    }).then(res => {
+      const { result } = res;
+      const { code } = result as any;
+      if (!code) {
+        Taro.showToast({
+          title: '保存失败',
+          icon: 'none'
+        })
+        return
+      }
+      Taro.showToast({
+        title: '保存成功'
+      })
+      setComment("")
+    })
+
+    console.log(id);
   }
 
   const handCommentChange = (e) => {
@@ -90,7 +125,7 @@ const QuestionDetail: React.FC<Iprops> = ({ }) => {
         placeholder="请输入评论"
         onInput={handCommentChange}
       />
-      <Button onClick={() => handComment(1)}>提交评论</Button>
+      <Button onClick={() => handComment()}>提交评论</Button>
     </View>
   </PageBarRoot>
 }

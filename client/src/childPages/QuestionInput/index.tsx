@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2020-12-17 15:46:57
+ * @LastEditTime 2020-12-22 17:26:10
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -135,9 +135,15 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
       const { result } = res;
       const { code } = result as any;
       if (!code) {
-        console.log("服务器错误");
+        Taro.showToast({
+          title: '保存失败',
+          icon: 'none'
+        })
         return
       }
+      Taro.showToast({
+        title: '保存成功'
+      })
     })
   }
 
