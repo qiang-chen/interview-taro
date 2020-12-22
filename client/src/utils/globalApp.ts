@@ -1,10 +1,11 @@
 /**
  * @description 全局变量
- * @author ronffy
- * @Date 2019-12-06 14:05:26
- * @LastEditTime 2019-12-11 15:18:03
- * @LastEditors ronffy
+ * @author cq
+ * @Date 2020-12-22 14:24:01
+ * @LastEditTime 2020-12-22 14:25:56
+ * @LastEditors cq
  */
+
 
 import subscribe from './subscribe';
 import Taro, { getSystemInfoSync } from '@tarojs/taro';

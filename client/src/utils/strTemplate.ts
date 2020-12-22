@@ -1,10 +1,11 @@
 /**
  * @description 字符串模版引擎
- * @author ronffy
- * @Date 2019-12-01 14:08:53
- * @LastEditTime 2019-12-01 14:11:09
- * @LastEditors ronffy
+ * @author cq
+ * @Date 2020-12-22 14:24:01
+ * @LastEditTime 2020-12-22 14:27:15
+ * @LastEditors cq
  */
+
 
 /**
  * @param tpl 模版字符串

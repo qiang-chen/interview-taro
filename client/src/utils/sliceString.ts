@@ -1,10 +1,11 @@
 /**
  * @description 截取指定长度字符串（正则为处理emoji）
- * @author ronffy
- * @Date 2019-12-01 14:08:53
- * @LastEditTime 2019-12-01 14:11:17
- * @LastEditors ronffy
+ * @author cq
+ * @Date 2020-12-22 14:24:01
+ * @LastEditTime 2020-12-22 14:27:05
+ * @LastEditors cq
  */
+
 
 export default function sliceString(str, start, end) {
   const arr = str.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[^\uD800-\uDFFF]/g);

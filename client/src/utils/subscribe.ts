@@ -1,12 +1,13 @@
 /**
  * @description 订阅方法
- * @author ronffy
- * @Date 2019-12-06 14:05:40
- * @LastEditTime 2019-12-06 14:08:10
- * @LastEditors ronffy
+ * @author cq
+ * @Date 2020-12-22 14:24:01
+ * @LastEditTime 2020-12-22 14:27:35
+ * @LastEditors cq
  * @param {*} listener 
  * @param {*} listeners 
  */
+
 
 export default function subscribe<L>(listener: L, listeners: L[]) {
   if (typeof listener !== 'function') {

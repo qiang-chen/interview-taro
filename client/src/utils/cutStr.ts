@@ -1,10 +1,11 @@
 /**
- * @description 截断指定长度字符串，以指定标识结尾
- * @author ronffy
- * @Date 2019-12-01 14:08:53
- * @LastEditTime 2019-12-01 14:11:30
- * @LastEditors ronffy
+ * @description  截断指定长度字符串，以指定标识结尾
+ * @author cq
+ * @Date 2020-12-22 14:24:01
+ * @LastEditTime 2020-12-22 14:24:48
+ * @LastEditors cq
  */
+
 
 import sliceString from './sliceString';
 

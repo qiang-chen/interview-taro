@@ -1,10 +1,9 @@
 /**
  * @description 参数序列化
- * @author ronffy
- * @Date 2019-11-19 13:20:52
- * @LastEditTime 2019-11-21 18:27:02
- * @LastEditors ronffy
- * 
+ * @author cq
+ * @Date 2020-12-22 14:24:01
+ * @LastEditTime 2020-12-22 14:26:35
+ * @LastEditors cq
  * @example
  * stringify({ b: 2, a: 1 }) => 'b=2&a=1'
  * stringify({ b: 2, a: 1 }, true) => 'a=1&b=2'

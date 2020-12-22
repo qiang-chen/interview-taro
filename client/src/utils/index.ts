@@ -1,10 +1,11 @@
 /**
  * @description 工具方法的入口文件
- * @author ronffy
- * @Date 2019-12-01 14:23:06
- * @LastEditTime 2019-12-01 14:24:29
- * @LastEditors ronffy
+ * @author cq
+ * @Date 2020-12-22 14:24:01
+ * @LastEditTime 2020-12-22 14:26:07
+ * @LastEditors cq
  */
+
 
 export { default as request } from './request';
 export { default as qs } from './qs';

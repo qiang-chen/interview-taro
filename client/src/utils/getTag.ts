@@ -1,10 +1,11 @@
 /**
  * @description 获取一个数据的类型 tag
- * @author ronffy
- * @Date 2019-12-18 20:08:44
- * @LastEditTime 2019-12-18 20:38:44
- * @LastEditors ronffy
+ * @author cq
+ * @Date 2020-12-22 14:24:01
+ * @LastEditTime 2020-12-22 14:25:46
+ * @LastEditors cq
  */
+
 const toString = Object.prototype.toString;
 
 type Tag = '[object Undefined]' | '[object Null]' | '[object Number]' | '[object String]'
