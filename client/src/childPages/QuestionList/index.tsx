@@ -23,6 +23,7 @@ import ShowAnswerView from "./component/showAnswerView/index"
 import ShowTitleView from "./component/ShowTitleView"
 import { UserInfo } from '@/ts-types/store/AppState';
 import pagePath from '@/config/pagePath';
+import _ from 'lodash';
 import './index.scss'
 
 
@@ -39,7 +40,7 @@ const namespace = 'home';
 
 const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   const [subjectList, setSubjectList] = useState([]) as any;
-
+  console.log(subjectList, 'subjectList');
   const handleClickTitle = () => {
     console.log("点击首页标题")
   }
@@ -59,7 +60,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         console.log("服务器错误");
         return
       }
-      setSubjectList(data)
+      setSubjectList(_.filter(data, x => x.content))
     })
   }, [])
 
@@ -92,7 +93,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
     })
   }
 
-  const handDetail=()=>{
+  const handDetail = () => {
     Taro.navigateTo({ url: pagePath.questionDetail })
   }
 
@@ -104,32 +105,26 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         </View>
     </CusNavBar>
     <View className='page-home'>
-      {subjectList.map((item, index) => {
-        if (item.content) {
-          return <>
-            第{index}题、  题目分类 {item.subject_type}  创建时间 {item.createTime}
-            <ShowTitleView
-              title={item.title}
-            />
-            <ShowAnswerView
-              answer={item}
-            />
+      {_.map(subjectList, (x, i) => {
+        return <View className='questionlist'>
+          <View className='questionlist-title'>
+            <Text>第{i + 1}题 </Text>
+            <Text className='questionlist-title-r'>题目分类:<Text className='questionlist-title-r-t'>{x.subject_type} </Text> </Text>
+          </View>
+          <View className='questionlist-con'>
             <View>
-              点赞的用户头像列表
-            {
-                item.thumbs.map(el => <Image
-                  src={el.userInfo.avatarUrl}
-                  style='width: 50px;height: 50px;'
-                />)
-              }
+              创建时间 {x.createTime}
             </View>
-
-            <Button disabled={item.isDisable} onClick={() => handFabulous(item._id)}>点赞</Button>
-            <Button onClick={() => handDetail(item._id)}>点击进入详情</Button>
-          </>
-        } else {
-          return "暂无数据"
-        }
+            <ShowTitleView title={x.title} />
+            <ShowAnswerView answer={x} />
+            <View>
+              <View>点赞的用户头像列表</View>
+              {_.map(x.thumbs, y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
+            </View>
+            <Button disabled={x.isDisable} onClick={() => handFabulous(x._id)}>点赞</Button>
+            <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
+          </View>
+        </View>
       })}
     </View>
   </PageBarRoot>
