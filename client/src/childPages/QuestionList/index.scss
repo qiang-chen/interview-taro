@@ -17,7 +17,7 @@
 }
 .questionlist {
   margin: 20rpx;
-  border:solid 1rpx #f66;
+  border: solid 1rpx #f66;
   border-radius: 10rpx;
   padding: 10px;
   .questionlist_title {
@@ -27,7 +27,7 @@
     background-clip: text;
     line-height: 60rpx;
     font-size: 60rpx;
-    .questionlist_title_t{
+    .questionlist_title_t {
       width: 33rpx;
       height: 33rpx;
       text-align: center;
@@ -41,11 +41,30 @@
       }
     }
   }
-  .questionlist_con{
-    .questionlist_con_t{
+  .questionlist_con {
+    .questionlist_con_t {
       color: #fff;
+    }
+    .questionlist_con_image {
+      position: relative;
+      border-radius: 100%;
+      margin: 10px;
+    }
+  }
+  .questionlist_btn {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .questionlist_btn_zan {
+      display: flex;
+      line-height: 80px;
+      text-align: center;
+      font-size: 50px;
+      color: #f66;
+    }
+    .questionlist_btn_detail {
+      line-height: 80px;
     }
   }
 }
-
-

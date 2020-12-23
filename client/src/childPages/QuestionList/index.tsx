@@ -9,7 +9,7 @@
 
 
 import Taro from '@tarojs/taro'
-import { View, Text, Image, Editor, Button, Input } from '@tarojs/components'
+import { View, Text, Image, Editor, Button, Input, Picker } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
@@ -40,6 +40,7 @@ const namespace = 'home';
 const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   const [subjectList, setSubjectList] = useState([]) as any;
   console.log(subjectList, 'subjectList');
+  console.log(userInfo, 'userInfo');
   const handleClickTitle = () => {
     console.log("点击首页标题")
   }
@@ -74,6 +75,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   const handFabulous = (questionId) => {
     // 
     console.log(11);
+
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'thumbs',
@@ -109,7 +111,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   //头像去重
   const arrayUnique = (arr, name) => {
     var hash = {};
-    return arr.reduce(function (item, next) {
+    return _.reduce(arr, (item, next) => {
       hash[next[name]] ? '' : hash[next[name]] = true && item.push(next);
       return item;
     }, []);
@@ -126,19 +128,23 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
       {_.map(subjectList, (x, i) => {
         return <View className='questionlist'>
           <View className='questionlist_title'>
-            <Text>第<Text className='questionlist_title_t' style={{ backgroundColor: '#' + getRandomColor(), width: '33px', height: '33px', lineHeight: '33px', textAlign: 'center', borderRadius: '50%', display: 'inline-block', opacity: 0.5 }}>{i + 1}</Text>题 </Text>
+            <Text>第<Text className='questionlist_title_t' style={{ backgroundColor: '#' + getRandomColor(), width: '33px', height: '33px', lineHeight: '33px', textAlign: 'center', borderRadius: '50%', display: 'inline-block' }}>{i + 1}</Text>题 </Text>
             <Text className='questionlist_title_r'>题目分类:<Text className='questionlist_title_r_t'>{x.subject_type} </Text> </Text>
           </View>
           <View className='questionlist_con'>
-            <View> 创建时间:<Text className='questionlist_con_t'>{x.createTime}</Text>  </View>
-            <View><Text style={{ color: 'white', backgroundColor: 'rgb(20, 147, 220)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Question:</Text><ShowTitleView title={x.title} /></View>
-            <View><Text style={{ color: 'white', backgroundColor: 'rgb(104, 71, 219)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Answer:</Text><ShowAnswerView answer={x} /></View>
+            <View><Text style={{ color: 'white', backgroundColor: 'rgb(199, 14, 190)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Create Time</Text> <Text className='questionlist_con_t'>{x.createTime}</Text>
+            </View>
+            <View><Text style={{ color: 'white', backgroundColor: 'rgb(20, 147, 220)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Question</Text><ShowTitleView title={x.title} /></View>
+            <View><Text style={{ color: 'white', backgroundColor: 'rgb(104, 71, 219)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Answer</Text><ShowAnswerView answer={x} /></View>
             <View>
               <View>点赞的用户头像列表</View>
-              {_.map(arrayUnique(x.thumbs, 'openid'), y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
+              {_.map(arrayUnique(x.thumbs, 'openid'), y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' className='questionlist_con_image' />)}
             </View>
-            <Button disabled={x.isDisable} onClick={() => handFabulous(x._id)}>点赞👍</Button>
-            <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
+            <View className='questionlist_btn'>
+              <Button disabled={x.isDisable} className='questionlist_btn_zan' onClick={() => handFabulous(x._id)}>{x.isDisable ? '已赞👍' : '点赞'}</Button>
+              <Button className='questionlist_btn_detail' onClick={() => handDetail(x._id)}>详情</Button>
+            </View>
+
           </View>
         </View>
       })}
