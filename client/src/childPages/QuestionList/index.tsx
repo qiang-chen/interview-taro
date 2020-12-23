@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-23 14:56:05
+ * @LastEditTime 2020-12-23 15:01:47
  * @LastEditors cq
  */
 
@@ -137,7 +137,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
               <View>点赞的用户头像列表</View>
               {_.map(arrayUnique(x.thumbs, 'openid'), y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
             </View>
-            <Button disabled={x.isDisable} onClick={() => handFabulous(x._id)}>点赞</Button>
+            <Button disabled={x.isDisable} onClick={() => handFabulous(x._id)}>点赞👍</Button>
             <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
           </View>
         </View>
