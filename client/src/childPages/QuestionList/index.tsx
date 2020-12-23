@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-23 10:42:40
+ * @LastEditTime 2020-12-23 14:56:05
  * @LastEditors cq
  */
 
@@ -25,7 +25,6 @@ import { UserInfo } from '@/ts-types/store/AppState';
 import pagePath from '@/config/pagePath';
 import _ from 'lodash';
 import "./index.scss"
-// console.log(style,"style")
 
 type HomeProps = {
   dispatch?: any
@@ -93,8 +92,27 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
     })
   }
 
-  const handDetail=(id)=>{
+  const handDetail = (id) => {
     Taro.navigateTo({ url: `${pagePath.questionDetail}?id=${id}` })
+  }
+
+  //随机颜色
+  const getRandomColor = () => {
+    var rand = Math.floor(Math.random() * 0xFFFFFF).toString(16);
+    if (rand.length == 6) {
+      return rand;
+    } else {
+      return getRandomColor();
+    }
+  }
+
+  //头像去重
+  const arrayUnique = (arr, name) => {
+    var hash = {};
+    return arr.reduce(function (item, next) {
+      hash[next[name]] ? '' : hash[next[name]] = true && item.push(next);
+      return item;
+    }, []);
   }
 
   return <PageBarRoot hasTabBar>
@@ -104,22 +122,20 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         题库
         </View>
     </CusNavBar>
-    <View className='page-home'>
+    <View className='page_home'>
       {_.map(subjectList, (x, i) => {
-        return <View className="questionlist">
-          <View className='questionlist-title'>
-            <Text>第{i + 1}题 </Text>
-            <Text className='questionlist-title-r'>题目分类:<Text className='questionlist-title-r-t'>{x.subject_type} </Text> </Text>
+        return <View className='questionlist'>
+          <View className='questionlist_title'>
+            <Text>第<Text className='questionlist_title_t' style={{ backgroundColor: '#' + getRandomColor(), width: '33px', height: '33px', lineHeight: '33px', textAlign: 'center', borderRadius: '50%', display: 'inline-block', opacity: 0.5 }}>{i + 1}</Text>题 </Text>
+            <Text className='questionlist_title_r'>题目分类:<Text className='questionlist_title_r_t'>{x.subject_type} </Text> </Text>
           </View>
-          <View className='questionlist-con'>
-            <View>
-              创建时间 {x.createTime}
-            </View>
-            <ShowTitleView title={x.title} />
-            <ShowAnswerView answer={x} />
+          <View className='questionlist_con'>
+            <View> 创建时间:<Text className='questionlist_con_t'>{x.createTime}</Text>  </View>
+            <View><Text style={{ color: 'white', backgroundColor: 'rgb(20, 147, 220)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Question:</Text><ShowTitleView title={x.title} /></View>
+            <View><Text style={{ color: 'white', backgroundColor: 'rgb(104, 71, 219)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Answer:</Text><ShowAnswerView answer={x} /></View>
             <View>
               <View>点赞的用户头像列表</View>
-              {_.map(x.thumbs, y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
+              {_.map(arrayUnique(x.thumbs, 'openid'), y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
             </View>
             <Button disabled={x.isDisable} onClick={() => handFabulous(x._id)}>点赞</Button>
             <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
@@ -136,5 +152,4 @@ function mapStateToProps(state) {
     openid: state.app.openid
   })
 }
-
 export default connect(mapStateToProps)(Home as any) 
