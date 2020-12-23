@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-23 10:17:51
+ * @LastEditTime 2020-12-23 10:22:31
  * @LastEditors cq
  */
 
@@ -24,7 +24,7 @@ import ShowTitleView from "./component/ShowTitleView"
 import { UserInfo } from '@/ts-types/store/AppState';
 import pagePath from '@/config/pagePath';
 import _ from 'lodash';
-import './index.scss'
+import style from "./index.scss"
 
 
 type HomeProps = {
@@ -106,7 +106,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
     </CusNavBar>
     <View className='page-home'>
       {_.map(subjectList, (x, i) => {
-        return <View className='questionlist'>
+        return <View className={style.questionlist}>
           <View className='questionlist-title'>
             <Text>第{i + 1}题 </Text>
             <Text className='questionlist-title-r'>题目分类:<Text className='questionlist-title-r-t'>{x.subject_type} </Text> </Text>
