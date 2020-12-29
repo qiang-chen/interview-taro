@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2020-12-22 17:26:10
+ * @LastEditTime 2020-12-29 20:01:32
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -21,6 +21,7 @@ import { connect } from "react-redux";
 import { HomeState } from "@/ts-types/store";
 import React, { useEffect, useState } from 'react';
 import './index.scss'
+import pagePath from '@/config/pagePath';
 
 
 type HomeProps = {
@@ -144,6 +145,7 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
       Taro.showToast({
         title: '保存成功'
       })
+      Taro.navigateTo({ url: pagePath.questionList })
     })
   }
 
