@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-23 15:01:47
+ * @LastEditTime 2020-12-29 17:15:11
  * @LastEditors cq
  */
 
@@ -24,6 +24,7 @@ import ShowTitleView from "./component/ShowTitleView"
 import { UserInfo } from '@/ts-types/store/AppState';
 import pagePath from '@/config/pagePath';
 import _ from 'lodash';
+import produce from 'immer';
 import "./index.scss"
 
 type HomeProps = {
@@ -38,8 +39,10 @@ const namespace = 'home';
 
 
 const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
-  const [subjectList, setSubjectList] = useState([]) as any;
+  const [subjectList, setSubjectList] = useState([]) as any; //题目列表
   console.log(subjectList, 'subjectList');
+  const [temporaryThumbs, setTemporaryThumbs] = useState([]) as any;//临时点赞列表
+
   const handleClickTitle = () => {
     console.log("点击首页标题")
   }
@@ -72,8 +75,14 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
 
   // 点赞
   const handFabulous = (questionId) => {
-    // 
-    console.log(11);
+
+    setTemporaryThumbs(produce(temporaryThumbs, draft => {
+      draft.push({
+        questionId,
+        userInfo
+      })
+    }))
+
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'thumbs',
@@ -86,7 +95,10 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
       const { result } = res;
       const { code } = result as any;
       if (!code) {
-        console.log("服务器错误");
+        Taro.showToast({
+          title: '服务器故障，点赞失败',
+          icon: 'none'
+        })
         return
       }
     })
@@ -136,8 +148,17 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
             <View>
               <View>点赞的用户头像列表</View>
               {_.map(arrayUnique(x.thumbs, 'openid'), y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
+              {
+                temporaryThumbs.map(item => {
+                  if (item.questionId == x._id) {
+                    return <Image src={item.userInfo.avatarUrl} style='width: 50px;height: 50px;' />
+                  }
+                })
+              }
             </View>
-            <Button disabled={x.isDisable} onClick={() => handFabulous(x._id)}>点赞👍</Button>
+            {
+              x.isDisable || temporaryThumbs.some(el => el.questionId == x._id) ? "" : <View onClick={() => handFabulous(x._id)}>👍</View>
+            }
             <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
           </View>
         </View>

@@ -58,6 +58,19 @@
         {
           "name": "childPages/QuestionInput/index",
           "pathName": "childPages/QuestionInput/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "childPages/QuestionList/index",
+          "pathName": "/childPages/QuestionList/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "childPages/QuestionList/index",
+          "pathName": "childPages/QuestionList/index",
+          "query": "",
           "scene": null
         }
       ]
