@@ -2,7 +2,7 @@
  * @description 题库列表的云服务
  * @author cq
  * @Date 2020-11-19 19:54:10
- * @LastEditTime 2020-12-22 17:57:43
+ * @LastEditTime 2020-12-29 18:27:17
  * @LastEditors cq
  */
 const cloud = require('wx-server-sdk');
@@ -71,11 +71,11 @@ exports.main = async (event, context) => {
           foreignField: "openid",
           as: "userInfo"
         })
-        .skip((page - 1) * pageSize)
-        .limit(pageSize)
         .sort({      //聚合阶段不能和orderBy连用   需要用sort进行排序使用
           createTime: -1
         })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
         .addFields({
           isDisable: $.in([wxContext.OPENID, '$thumbs.openid'])
         })
@@ -126,11 +126,11 @@ exports.main = async (event, context) => {
           foreignField: "questionId",
           as: "thumbs"
         })
-        .skip((page - 1) * pageSize)
-        .limit(pageSize)
         .sort({      //聚合阶段不能和orderBy连用   需要用sort进行排序使用
           createTime: -1
         })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
         .addFields({
           isDisable: $.in([wxContext.OPENID, '$thumbs.openid'])
         })
