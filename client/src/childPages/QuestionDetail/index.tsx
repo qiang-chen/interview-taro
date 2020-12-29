@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-22 17:41:40
+ * @LastEditTime 2020-12-29 17:49:46
  * @LastEditors cq
  */
 
@@ -16,6 +16,7 @@ import { UserInfo } from '@/ts-types/store/AppState';
 import PageBarRoot from '@/containers/PageBarRoot';
 import CusNavBar from '@/components/CusNavBar';
 import pagePath from '@/config/pagePath';
+import { connect } from "react-redux";
 import './index.scss'
 
 
@@ -29,7 +30,9 @@ type Iprops = QuestionDetailProps & Partial<UserInfo>
 
 
 
-const QuestionDetail: React.FC<Iprops> = ({ }) => {
+const QuestionDetail: React.FC<Iprops> = ({ 
+  userInfo
+}) => {
 
   const [comment, setComment] = useState("");
   const [detailObj, setDetailObj] = useState({});
@@ -74,6 +77,7 @@ const QuestionDetail: React.FC<Iprops> = ({ }) => {
       name: 'saveComment',
       // 传递给云函数的event参数
       data: {
+        userInfo,
         questionId: id,
         text: comment,
         commentId: ""
@@ -132,4 +136,10 @@ const QuestionDetail: React.FC<Iprops> = ({ }) => {
 
 
 
-export default QuestionDetail
+function mapStateToProps(state) {
+  return ({
+    userInfo: state.app.userInfo,
+    openid: state.app.openid
+  })
+}
+export default connect(mapStateToProps)(QuestionDetail as any) 

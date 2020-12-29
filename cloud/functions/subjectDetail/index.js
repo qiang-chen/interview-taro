@@ -2,7 +2,7 @@
  * @description 试题详情页面接口
  * @author cq
  * @Date 2020-12-22 15:15:22
- * @LastEditTime 2020-12-22 16:55:06
+ * @LastEditTime 2020-12-29 17:36:30
  * @LastEditors cq
  */
 
@@ -33,7 +33,7 @@ exports.main = async (event, context) => {
       .match({
         _id: id
       })
-      .lookup({
+      .lookup({   
         from: "users",
         localField: "user_id",
         foreignField: "openid",
@@ -45,8 +45,11 @@ exports.main = async (event, context) => {
         foreignField: "questionId",
         as: "thumbs"
       })
-      .addFields({
-        isDisable: $.in([wxContext.OPENID, '$thumbs.openid'])
+      .lookup({
+        from: "comment",
+        localField: "_id",
+        foreignField: "questionId",
+        as: "comment"
       })
       .end()
     data = result.list[0]

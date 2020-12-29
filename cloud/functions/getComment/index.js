@@ -1,8 +1,8 @@
 /**
- * @description 获取评论列表
+ * @description 获取评论列表  暂时没用
  * @author cq
  * @Date 2020-12-22 17:49:24
- * @LastEditTime 2020-12-22 20:47:55
+ * @LastEditTime 2020-12-29 17:27:25
  * @LastEditors cq
  */
 
@@ -37,45 +37,36 @@ exports.main = async (event, context) => {
         createTime: -1
       })
       .end();
-    console.log(result.list.length)
-    let newData = []
-    for (let index = 0; index < result.list.length; index++) {
-      const element = result.list[index];
-      if (!element.commentId) {
-        // 证明是第一级别的评论
-        newData.push({
-          content: element,
-          children: []
-        })
-      }
-    }
 
-    console.log(result.list.length)
+    data = result.list;
+    // console.log(result.list.length)
+    // let newData = []
+    // for (let index = 0; index < result.list.length; index++) {
+    //   const element = result.list[index];
+    //   if (!element.commentId) {
+    //     // 证明是第一级别的评论
+    //     newData.push({
+    //       content: element,
+    //       children: []
+    //     })
+    //   }
+    // }
 
-    for (let index = 0; index < result.list.length; index++) {
-      const element = result.list[index];
-      if (!element.commentId) continue
-      const flagIndex = newData.findIndex(item => item.content._id == element.commentId);
-      if (flagIndex != -1) {
-        newData[flagIndex].children.push(
-          {
-            content: element,
-            children: []
-          }
-        )
-      }
-      // for (let i = 0; i < newData.length; i++) {
-      //   const item = newData[i];
-      //   console.log(item.content._id, element.commentId, item.content._id == element.commentId)
-      //   if (item.content._id == element.commentId) {
-      //     item.children.push(item)
-      //   }
-      // }
-    }
+    // console.log(result.list.length)
 
-
-
-    data = newData
+    // for (let index = 0; index < result.list.length; index++) {
+    //   const element = result.list[index];
+    //   if (!element.commentId) continue
+    //   const flagIndex = newData.findIndex(item => item.content._id == element.commentId);
+    //   if (flagIndex != -1) {
+    //     newData[flagIndex].children.push(
+    //       {
+    //         content: element,
+    //         children: []
+    //       }
+    //     )
+    //   }
+    // }
 
   } catch (error) {
     console.error(error)
@@ -83,6 +74,6 @@ exports.main = async (event, context) => {
   }
   return {
     code,
-    data,
+    data
   }
 }

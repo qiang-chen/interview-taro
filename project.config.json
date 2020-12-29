@@ -72,6 +72,12 @@
           "pathName": "childPages/QuestionList/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "childPages/QuestionDetail/index",
+          "pathName": "childPages/QuestionDetail/index",
+          "query": "id= \"b1a52c595fbcc9ec005f6c8941bb6c43\"",
+          "scene": null
         }
       ]
     }

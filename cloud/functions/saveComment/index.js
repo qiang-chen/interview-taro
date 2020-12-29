@@ -2,7 +2,7 @@
  * @description 保存评论接口
  * @author cq
  * @Date 2020-12-22 17:14:50
- * @LastEditTime 2020-12-22 17:35:18
+ * @LastEditTime 2020-12-29 17:48:15
  * @LastEditors cq
  */
 
@@ -16,7 +16,7 @@ cloud.init({
 
 
 exports.main = async (event, context) => {
-  const { text, questionId, commentId } = event;
+  const { text, questionId, commentId, userInfo} = event;
   const db = cloud.database();
   // 全局的工具类，在云函数中获取微信的调用上下文
   const wxContext = cloud.getWXContext();
@@ -29,6 +29,7 @@ exports.main = async (event, context) => {
       data: {
         createTime: time(new Date()),
         text,
+        userInfo,
         user_id: wxContext.OPENID,
         questionId,
         commentId
