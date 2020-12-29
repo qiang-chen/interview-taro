@@ -1,6 +1,6 @@
 type: subject
 # headr: <type>(<scope>): <subject>
-  # - type: feat, fix, docs, style, refactor, test, chore
+  # - type: feat, fix, docs, style, refactor, test, chore , remove
   # - scope: can be empty
   # - subject: start with verb (such as 'change'), 50-character line
   #
@@ -24,3 +24,4 @@ type: subject
 # test: 测试用例，包括单元测试、集成测试。
 # chore: 改变构建流程、或者增加依赖库、工具等。
 # revert: 版本回滚
+# remove: 删除某块功能
