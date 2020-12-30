@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-30 10:41:55
+ * @LastEditTime 2020-12-30 17:51:53
  * @LastEditors cq
  */
 
@@ -11,12 +11,14 @@
 
 import Taro, { useRouter } from '@tarojs/taro'
 import { View, Text, Image, Editor, Button, Input } from '@tarojs/components'
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { UserInfo } from '@/ts-types/store/AppState';
 import PageBarRoot from '@/containers/PageBarRoot';
 import CusNavBar from '@/components/CusNavBar';
 import pagePath from '@/config/pagePath';
 import { connect } from "react-redux";
+import deep from "./utils/index"
+import classNames from "classnames"
 import './index.scss'
 
 
@@ -29,19 +31,21 @@ type Iprops = QuestionDetailProps & Partial<UserInfo>
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
 
-
-const QuestionDetail: React.FC<Iprops> = ({ 
+const QuestionDetail: React.FC<Iprops> = ({
   userInfo
 }) => {
 
   const [comment, setComment] = useState("");
-  const [detailObj, setDetailObj] = useState({});
+  const [detailObj, setDetailObj] = useState<any>({});
+  const [commentList, setCommentList] = useState([]);
+  const [commentId, setCommentId] = useState("");// 当前的评论IDcommentId
+  // let commentId = ""
   const router = useRouter();
   const { id } = router.params;
+  let preItem: any = {};
+
 
   useEffect(() => {
-    console.log(router);
-
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'subjectDetail',
@@ -51,19 +55,19 @@ const QuestionDetail: React.FC<Iprops> = ({
       }
     }).then(res => {
       const { result } = res;
-      console.log(result,11);
       const { code, data } = result as any;
       if (!code) {
         console.log("服务器错误");
         return
       }
-      console.log(data);
+      console.log(data.comment.reverse(),"初始化评论");
+      setCommentList(deep(data.comment.reverse(), "", []))
       setDetailObj(data)
     })
-  }, [])
+  }, []);
 
   // 提交评论
-  const handComment = () => {
+  const handComment = async () => {
     // questionId 当前题目id  和当前评论ID  判断是不是第一层的
 
     if (!comment) {
@@ -74,7 +78,7 @@ const QuestionDetail: React.FC<Iprops> = ({
       return
     }
 
-    Taro.cloud.callFunction({
+    let saveRes = await Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'saveComment',
       // 传递给云函数的event参数
@@ -82,29 +86,42 @@ const QuestionDetail: React.FC<Iprops> = ({
         userInfo,
         questionId: id,
         text: comment,
-        commentId: ""
+        commentId,
       }
-    }).then(res => {
-      const { result } = res;
-      const { code } = result as any;
-      if (!code) {
-        Taro.showToast({
-          title: '保存失败',
-          icon: 'none'
-        })
-        return
-      }
+    })
+    const { result } = saveRes as any;
+    const { code: saveCode } = result as any;
+    if (!saveCode) {
       Taro.showToast({
-        title: '保存成功'
+        title: '保存失败',
+        icon: 'none'
       })
-      setComment("")
+      return
+    }
+    Taro.showToast({
+      title: '保存成功'
     })
 
-    console.log(id);
+    const res = await Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'getComment',
+      // 传递给云函数的event参数
+      data: {
+        id
+      }
+    })
+    const { code, data } = res.result as any;
+    if (!code) {
+      console.log("获取最新评论失败");
+      return
+    }
+    console.log(data,"评论");
+    setCommentList(deep(data, "", []))
+    setCommentId("")
+    setComment("")
   }
 
   const handCommentChange = (e) => {
-    console.log(e.target.value);
     setComment(e.target.value)
   }
 
@@ -114,6 +131,13 @@ const QuestionDetail: React.FC<Iprops> = ({
     })
   }
 
+  // 用户回复评论保存ID
+  const handCommentUser = (commentId) => {
+    setCommentId(commentId)
+    // commentId = commentId
+  }
+
+  const { title, createTime, content = {} } = detailObj as any;
   return <PageBarRoot hasTabBar>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
@@ -125,13 +149,58 @@ const QuestionDetail: React.FC<Iprops> = ({
       <View className='page-QuestionDetail'>
         详情页面
     </View>
+      <View>
+        标题： {title}
+      </View>
+      <View>
+        创建时间： {createTime}
+      </View>
+      {
+        content.ops && content.ops.map(item => {
+          if (item.attributes) {
+            // 图片
+            return <Image src={item.insert.image} />
+          } else {
+            // 文字
+            return <View>{item.insert}</View>
+          }
+        })
+      }
 
-      <Input
-        value={comment}
-        placeholder="请输入评论"
-        onInput={handCommentChange}
-      />
-      <Button onClick={() => handComment()}>提交评论</Button>
+      {
+        commentList.map((item: any) => {
+          if (!item.commentId) {
+            preItem=item;
+            return <View
+              onClick={() => handCommentUser(item._id)}
+              className={classNames("one", {
+                "color": commentId == item._id
+              })}
+            >
+              {item.userInfo.nickName}评论{detailObj.userInfo && detailObj.userInfo[0].userInfo.nickName}---{item.text}--{item.createTime}
+            </View>
+          } else {
+            return <View
+              onClick={() => handCommentUser(item._id)}
+              className={classNames("two", {
+                "color": commentId == item._id
+              })}
+            >
+              {item.userInfo.nickName}回复：{preItem.userInfo && preItem.userInfo.nickName}---{item.text}--{item.createTime}</View>
+          }
+        })
+      }
+      {
+        commentId && <View>
+          <Input
+            value={comment}
+            placeholder="请输入评论"
+            onInput={handCommentChange}
+          />
+          <Button onClick={() => handComment()}>提交评论</Button>
+        </View>
+      }
+
     </View>
   </PageBarRoot>
 }

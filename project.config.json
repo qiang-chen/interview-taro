@@ -6,8 +6,8 @@
   "appid": "wxde0ff95399f86e89",
   "setting": {
     "urlCheck": false,
-    "es6": false,
-    "enhance": false,
+    "es6": true,
+    "enhance": true,
     "postcss": false,
     "preloadBackgroundData": false,
     "minified": false,
@@ -63,7 +63,7 @@
         },
         {
           "name": "childPages/QuestionList/index",
-          "pathName": "/childPages/QuestionList/index",
+          "pathName": "childPages/QuestionList/index",
           "query": "",
           "scene": null
         },
