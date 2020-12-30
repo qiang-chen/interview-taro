@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2020-12-29 20:01:32
+ * @LastEditTime 2020-12-29 20:20:49
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -103,10 +103,18 @@ const QuestionInput: React.FC<Iprops> = ({ }) => {
           }
         }).then(res => {
           const { data } = res.result as any;
+          Taro.showToast({
+            title: '图片上传成功',
+          })
           editorCtx.insertImage({
             src: data.fileID,
             height: '50px',
             extClass: "img_name"
+          })
+        }).catch(err=>{
+          Taro.showToast({
+            title: '图片上传失败',
+            icon: 'none'
           })
         })
       }
