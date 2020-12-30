@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-30 17:51:53
+ * @LastEditTime 2020-12-30 18:23:25
  * @LastEditors cq
  */
 
@@ -67,9 +67,9 @@ const QuestionDetail: React.FC<Iprops> = ({
   }, []);
 
   // 提交评论
-  const handComment = async () => {
+  const handComment = async(questionId) => {
     // questionId 当前题目id  和当前评论ID  判断是不是第一层的
-
+   
     if (!comment) {
       Taro.showToast({
         title: '评论内容不能为空',
@@ -77,7 +77,7 @@ const QuestionDetail: React.FC<Iprops> = ({
       })
       return
     }
-
+    
     let saveRes = await Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'saveComment',
@@ -89,6 +89,7 @@ const QuestionDetail: React.FC<Iprops> = ({
         commentId,
       }
     })
+   
     const { result } = saveRes as any;
     const { code: saveCode } = result as any;
     if (!saveCode) {
@@ -98,16 +99,16 @@ const QuestionDetail: React.FC<Iprops> = ({
       })
       return
     }
+    
     Taro.showToast({
       title: '保存成功'
     })
-
     const res = await Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'getComment',
       // 传递给云函数的event参数
       data: {
-        id
+        questionId: detailObj._id
       }
     })
     const { code, data } = res.result as any;
@@ -190,17 +191,12 @@ const QuestionDetail: React.FC<Iprops> = ({
           }
         })
       }
-      {
-        commentId && <View>
-          <Input
-            value={comment}
-            placeholder="请输入评论"
-            onInput={handCommentChange}
-          />
-          <Button onClick={() => handComment()}>提交评论</Button>
-        </View>
-      }
-
+      <Input
+        value={comment}
+        placeholder="请输入评论"
+        onInput={handCommentChange}
+      />
+      <Button onClick={() => handComment(detailObj.questionId)}>提交评论</Button>
     </View>
   </PageBarRoot>
 }
