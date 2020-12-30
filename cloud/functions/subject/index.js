@@ -2,7 +2,7 @@
  * @description 题库列表的云服务
  * @author cq
  * @Date 2020-11-19 19:54:10
- * @LastEditTime 2020-12-29 18:27:17
+ * @LastEditTime 2020-12-30 10:58:47
  * @LastEditors cq
  */
 const cloud = require('wx-server-sdk');
@@ -41,7 +41,7 @@ function getThumbs(id, db) {
 }
 
 exports.main = async (event, context) => {
-  const { keyword, page = 1, pageSize = 10 } = event;
+  const { keyword, page = 1, pageSize = 30 } = event;
   const wxContext = await cloud.getWXContext();
   const db = cloud.database();
   const $ = db.command.aggregate;

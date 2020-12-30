@@ -2,7 +2,7 @@
  * @description 试题详情页面接口
  * @author cq
  * @Date 2020-12-22 15:15:22
- * @LastEditTime 2020-12-29 17:36:30
+ * @LastEditTime 2020-12-30 11:05:16
  * @LastEditors cq
  */
 
@@ -20,10 +20,7 @@ cloud.init({
 exports.main = async (event, context) => {
   const db = cloud.database();
   // 全局的工具类，在云函数中获取微信的调用上下文
-  const wxContext = await cloud.getWXContext();
-  const $ = db.command.aggregate;
   const { id } = event;
-
   let data = null;
   let code = 1;
   // 云数据库操作
@@ -51,12 +48,12 @@ exports.main = async (event, context) => {
         foreignField: "questionId",
         as: "comment"
       })
-      .end()
+      .end();
     data = result.list[0]
   } catch (e) {
     console.error(e)
     data = e;
-    code = 0
+    code = 0;
   }
   return {
     code,

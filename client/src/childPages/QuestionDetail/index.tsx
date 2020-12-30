@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-29 17:49:46
+ * @LastEditTime 2020-12-30 10:41:55
  * @LastEditors cq
  */
 
@@ -51,11 +51,13 @@ const QuestionDetail: React.FC<Iprops> = ({
       }
     }).then(res => {
       const { result } = res;
+      console.log(result,11);
       const { code, data } = result as any;
       if (!code) {
         console.log("服务器错误");
         return
       }
+      console.log(data);
       setDetailObj(data)
     })
   }, [])
