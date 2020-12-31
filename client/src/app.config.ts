@@ -2,8 +2,8 @@
  * @description 
  * @author cq
  * @Date 2020-11-17 20:02:40
- * @LastEditTime 2020-12-30 16:05:33
- * @LastEditors cq
+ * @LastEditTime 2020-12-30 20:28:24
+ * @LastEditors oyqx
  */
 export default {
   pages: [
@@ -21,6 +21,7 @@ export default {
         'QuestionInput/index',//题库录入
         'Contact/index',//个人联系方式页面
         'QuestionDetail/index',//题库详情页面
+        'ArticalDetail/index',//题库详情页面
       ],
     }
   ],

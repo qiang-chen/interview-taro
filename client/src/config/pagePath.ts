@@ -2,8 +2,8 @@
  * @description 各页面的路径
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-21 20:20:11
- * @LastEditors cq
+ * @LastEditTime 2020-12-30 20:27:05
+ * @LastEditors oyqx
  */
 
 
@@ -14,5 +14,6 @@ export default {
   forum: '/childPages/Forum/index',//论坛
   questionInput:'/childPages/QuestionInput/index',//题库录入
   contact:'/childPages/Contact/index',//个人联系方式页面
-  questionDetail:"/childPages/QuestionDetail/index"
+  questionDetail:"/childPages/QuestionDetail/index",
+  articalDetail:"/childPages/ArticalDetail/index"
 }
