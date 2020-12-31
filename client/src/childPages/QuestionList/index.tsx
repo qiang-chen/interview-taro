@@ -3,18 +3,18 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-29 17:49:04
+ * @LastEditTime 2020-12-31 14:08:06
  * @LastEditors cq
  */
 
 
 import Taro from '@tarojs/taro'
-import { View, Text, Image, Editor, Button, Input } from '@tarojs/components'
+import { View, Text, Image, Editor, Button, Input, ScrollView } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
 import PageBarRoot from '@/containers/PageBarRoot';
-import { AtFloatLayout, AtSwipeAction, AtModal, AtToast } from 'taro-ui'
+import { AtFloatLayout, AtSwipeAction, AtModal, AtToast, AtDivider, AtActivityIndicator } from 'taro-ui'
 import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { HomeState } from "@/ts-types/store/index";
@@ -37,23 +37,31 @@ type Iprops = HomeProps & Partial<HomeState> & Partial<UserInfo>
 
 const namespace = 'home';
 
-
+let flag = false; //防止多次触发的开关
 const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   const [subjectList, setSubjectList] = useState([]) as any; //题目列表
-  console.log(subjectList, 'subjectList');
   const [temporaryThumbs, setTemporaryThumbs] = useState([]) as any;//临时点赞列表
+  const [pageObj, setPageObj] = useState({
+    page: 1,
+    pageSize: 10
+  }); //分页器的选择
+  const [isOpened, setIsOpened] = useState(true); //loading开关
+
+  const [AtDividerText, setAtDividerText] = useState(0); //分割线的提示文案 0正在加载 1没有更多了
 
   const handleClickTitle = () => {
     console.log("点击首页标题")
   }
 
   useEffect(() => {
+    console.log(Taro.getSystemInfoSync().windowHeight, 11111);
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'subject',
       // 传递给云函数的event参数
       data: {
-        keyword: ""
+        keyword: "",
+        ...pageObj
       }
     }).then(res => {
       const { result } = res;
@@ -63,6 +71,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         return
       }
       setSubjectList(_.filter(data, x => x.content))
+      setIsOpened(false)
     })
   }, [])
 
@@ -127,6 +136,55 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
     }, []);
   }
 
+  const onScrollToLower = (e) => {
+    console.log(flag, "onScrollToLower");
+    if (AtDividerText) {
+      // 没数据了
+      return
+    }
+    if (flag) {
+      return
+    }
+    flag = true;
+    setPageObj({
+      page: pageObj.page + 1,
+      pageSize: pageObj.pageSize
+    })
+
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'subject',
+      // 传递给云函数的event参数
+      data: {
+        keyword: "",
+        page: pageObj.page + 1,
+        pageSize: pageObj.pageSize
+      }
+    }).then(res => {
+      const { result } = res;
+      const { code, data } = result as any;
+      if (!code) {
+        console.log("服务器错误");
+        return
+      }
+      if (!data.length) {
+        // 没数据了
+        setAtDividerText(1)
+        return
+      }
+      setSubjectList(produce(subjectList, draft => {
+        draft.push(...(_.filter(data, x => x.content)))
+      }))
+      flag = false;
+      // setSubjectList(_.filter(data, x => x.content))
+    }).catch(err => {
+      flag = false
+    })
+  }
+
+  const onScroll = (e) => {
+    // console.log(e.detail,"onScroll")
+  }
   return <PageBarRoot hasTabBar>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
@@ -134,36 +192,62 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         题库
         </View>
     </CusNavBar>
-    <View className='page_home'>
-      {_.map(subjectList, (x, i) => {
-        return <View className='questionlist'>
-          <View className='questionlist_title'>
-            <Text>第<Text className='questionlist_title_t' style={{ backgroundColor: '#' + getRandomColor(), width: '33px', height: '33px', lineHeight: '33px', textAlign: 'center', borderRadius: '50%', display: 'inline-block', opacity: 0.5 }}>{i + 1}</Text>题 </Text>
-            <Text className='questionlist_title_r'>题目分类:<Text className='questionlist_title_r_t'>{x.subject_type} </Text> </Text>
-          </View>
-          <View className='questionlist_con'>
-            <View> 创建时间:<Text className='questionlist_con_t'>{x.createTime}</Text>  </View>
-            <View><Text style={{ color: 'white', backgroundColor: 'rgb(20, 147, 220)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Question:</Text><ShowTitleView title={x.title} /></View>
-            <View><Text style={{ color: 'white', backgroundColor: 'rgb(104, 71, 219)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Answer:</Text><ShowAnswerView answer={x} /></View>
-            <View>
-              <View>点赞的用户头像列表</View>
-              {_.map(arrayUnique(x.thumbs, 'openid'), y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
-              {
-                temporaryThumbs.map(item => {
-                  if (item.questionId == x._id) {
-                    return <Image src={item.userInfo.avatarUrl} style='width: 50px;height: 50px;' />
-                  }
-                })
-              }
+    <ScrollView
+      className='scrollview'
+      scrollY={true}
+      scrollWithAnimation
+      scrollTop={0}
+      style={{
+        height: Taro.getSystemInfoSync().windowHeight + "px"
+      }}
+      lowerThreshold={50}  //距底部/右边多远时，触发 scrolltolower 事件
+      // upperThreshold={50}  //距顶部/左边多远时，触发 scrolltoupper 事件
+      onScrollToLower={onScrollToLower} // 使用箭头函数的时候 可以这样写 `onScrollToUpper={this.onScrollToUpper}`
+      onScroll={onScroll}
+    >
+      <AtActivityIndicator
+        content='加载中...'
+        size={74}
+        mode="center"
+        isOpened={isOpened}
+      />
+      <View className='page_home'>
+        {_.map(subjectList, (x, i) => {
+          return <View className='questionlist'>
+            <View className='questionlist_title'>
+              <Text>第<Text className='questionlist_title_t' style={{ backgroundColor: '#' + getRandomColor(), width: '33px', height: '33px', lineHeight: '33px', textAlign: 'center', borderRadius: '50%', display: 'inline-block', opacity: 0.5 }}>{i + 1}</Text>题 </Text>
+              <Text className='questionlist_title_r'>题目分类:<Text className='questionlist_title_r_t'>{x.subject_type} </Text> </Text>
             </View>
-            {
-              x.isDisable || temporaryThumbs.some(el => el.questionId == x._id) ? "" : <View onClick={() => handFabulous(x._id)}>👍</View>
-            }
-            <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
+            <View className='questionlist_con'>
+              <View> 创建时间:<Text className='questionlist_con_t'>{x.createTime}</Text>  </View>
+              <View><Text style={{ color: 'white', backgroundColor: 'rgb(20, 147, 220)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Question:</Text><ShowTitleView title={x.title} /></View>
+              <View><Text style={{ color: 'white', backgroundColor: 'rgb(104, 71, 219)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Answer:</Text><ShowAnswerView answer={x} /></View>
+              <View>
+                <View>点赞的用户头像列表</View>
+                {_.map(arrayUnique(x.thumbs, 'openid'), y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
+                {
+                  temporaryThumbs.map(item => {
+                    if (item.questionId == x._id) {
+                      return <Image src={item.userInfo.avatarUrl} style='width: 50px;height: 50px;' />
+                    }
+                  })
+                }
+              </View>
+              {
+                x.isDisable || temporaryThumbs.some(el => el.questionId == x._id) ? "" : <View onClick={() => handFabulous(x._id)}>👍</View>
+              }
+              <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
+            </View>
           </View>
-        </View>
-      })}
-    </View>
+        })}
+        {
+          isOpened ? null : <AtDivider content={
+            AtDividerText ? "没有更多了" : "正在加载数据"
+          } fontColor='#ed3f14' lineColor='#ed3f14'
+          />
+        }
+      </View>
+    </ScrollView>
   </PageBarRoot>
 }
 

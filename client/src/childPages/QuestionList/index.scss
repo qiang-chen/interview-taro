@@ -1,25 +1,32 @@
+.scrollview {
+  width: 100%;
+}
+
 .page_home {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: linear-gradient(135deg, #f66, #f90, #3c9, #09f, #66f) left
-    center/400% 400%;
-  animation: move 1s infinite;
 }
+
 @keyframes move {
+
   0%,
   100% {
     background-position-x: left;
   }
+
   50% {
     background-position-x: right;
   }
 }
+
 .questionlist {
   margin: 20rpx;
-  border:solid 1rpx #f66;
   border-radius: 10rpx;
   padding: 10px;
+  background: linear-gradient(135deg, #f66, #f90, #3c9, #09f, #66f) left center/400% 400%;
+  animation: move 2.5s infinite;
+
   .questionlist_title {
     display: flex;
     justify-content: space-between;
@@ -27,25 +34,27 @@
     background-clip: text;
     line-height: 60rpx;
     font-size: 60rpx;
-    .questionlist_title_t{
+
+    .questionlist_title_t {
       width: 33rpx;
       height: 33rpx;
       text-align: center;
       line-height: 33px;
     }
+
     .questionlist_title_r {
       font-size: 30rpx;
       line-height: 30rpx;
+
       .questionlist_title_r_t {
         color: crimson;
       }
     }
   }
-  .questionlist_con{
-    .questionlist_con_t{
+
+  .questionlist_con {
+    .questionlist_con_t {
       color: #fff;
     }
   }
 }
-
-
