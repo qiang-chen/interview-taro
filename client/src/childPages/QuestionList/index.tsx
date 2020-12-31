@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-31 18:21:47
+ * @LastEditTime 2020-12-31 18:57:32
  * @LastEditors cq
  */
 
@@ -114,7 +114,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   }
 
   const handDetail = (id) => {
-    Taro.navigateTo({ url: `${pagePath.questionDetail}?id=${id}` })
+    Taro.navigateTo({ url: `${pagePath.articalDetail}?id=${id}` })
   }
 
   //随机颜色
