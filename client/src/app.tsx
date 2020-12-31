@@ -3,7 +3,7 @@
  * @description 
  * @author cq
  * @Date 2020-11-17 20:02:40
- * @LastEditTime 2020-12-08 18:10:10
+ * @LastEditTime 2020-12-31 18:36:33
  * @LastEditors cq
  */
 import React from 'react'
@@ -24,6 +24,20 @@ class App extends React.Component {
   }
 
   async componentDidShow() {
+    //请求个人openid  用于后续各种业务处理
+    const openid = await Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'getOpenid',
+    })
+    console.log(openid.result, 123);
+    const { data } = openid.result as any;
+    store.dispatch({
+      type: 'app/updateState',
+      payload: {
+        openid:data
+      }
+    })
+    
     // 查看是否授权  不能让用户默认授权了 好气呀～
     const res = await Taro.getSetting();
     if (res.authSetting['scope.userInfo']) {

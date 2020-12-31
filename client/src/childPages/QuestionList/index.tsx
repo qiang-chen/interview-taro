@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-31 14:08:06
+ * @LastEditTime 2020-12-31 18:21:47
  * @LastEditors cq
  */
 
@@ -185,6 +185,34 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   const onScroll = (e) => {
     // console.log(e.detail,"onScroll")
   }
+  const handDelete = async (id) => {
+    await Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'deleteSubject',
+      // 传递给云函数的event参数
+      data: {
+        id
+      }
+    })
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'subject',
+      // 传递给云函数的event参数
+      data: {
+        keyword: "",
+        ...pageObj
+      }
+    }).then(res => {
+      const { result } = res;
+      const { code, data } = result as any;
+      if (!code) {
+        console.log("服务器错误");
+        return
+      }
+      setSubjectList(_.filter(data, x => x.content))
+      setIsOpened(false)
+    })
+  }
   return <PageBarRoot hasTabBar>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
@@ -237,6 +265,9 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
                 x.isDisable || temporaryThumbs.some(el => el.questionId == x._id) ? "" : <View onClick={() => handFabulous(x._id)}>👍</View>
               }
               <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
+              {
+                openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <Button onClick={() => handDelete(x._id)}>删除</Button>
+              }
             </View>
           </View>
         })}
