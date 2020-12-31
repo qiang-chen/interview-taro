@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-30 18:23:25
+ * @LastEditTime 2020-12-31 16:41:30
  * @LastEditors cq
  */
 

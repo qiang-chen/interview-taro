@@ -213,7 +213,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
       />
       <View className='page_home'>
         {_.map(subjectList, (x, i) => {
-          return <View className='questionlist'>
+          return <View className='question_item'>
             <View className='questionlist_title'>
               <Text>第<Text className='questionlist_title_t' style={{ backgroundColor: '#' + getRandomColor(), width: '33px', height: '33px', lineHeight: '33px', textAlign: 'center', borderRadius: '50%', display: 'inline-block', opacity: 0.5 }}>{i + 1}</Text>题 </Text>
               <Text className='questionlist_title_r'>题目分类:<Text className='questionlist_title_r_t'>{x.subject_type} </Text> </Text>
