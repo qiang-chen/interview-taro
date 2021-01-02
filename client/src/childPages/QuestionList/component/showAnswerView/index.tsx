@@ -2,7 +2,7 @@
  * @description 容器组件  展示每个题的答案
  * @author cq
  * @Date 2020-11-24 16:40:33
- * @LastEditTime 2020-11-24 21:08:13
+ * @LastEditTime 2021-01-02 23:34:15
  * @LastEditors cq
  */
 
@@ -22,7 +22,7 @@ type Iprops = ShowViewProps
 
 
 
-const ShowView: React.FC<Iprops> = ({ 
+const ShowView: React.FC<Iprops> = ({
   answer
 }) => {
 
@@ -30,7 +30,7 @@ const ShowView: React.FC<Iprops> = ({
   const handReady = () => {
     Taro.createSelectorQuery().select(`#edit${answer._id}`).context(function (res) {
       res.context.setContents({
-        delta: answer.content.ops,
+        delta: answer.content && answer.content.ops,
         success: () => {
           console.log("成功");
         },

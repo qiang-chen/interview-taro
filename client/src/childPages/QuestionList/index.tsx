@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-31 18:57:32
+ * @LastEditTime 2021-01-02 23:41:34
  * @LastEditors cq
  */
 
@@ -23,7 +23,6 @@ import ShowAnswerView from "./component/showAnswerView/index"
 import ShowTitleView from "./component/ShowTitleView"
 import { UserInfo } from '@/ts-types/store/AppState';
 import pagePath from '@/config/pagePath';
-import _ from 'lodash';
 import produce from 'immer';
 import "./index.scss"
 
@@ -70,7 +69,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         console.log("服务器错误");
         return
       }
-      setSubjectList(_.filter(data, x => x.content))
+      setSubjectList(data)
       setIsOpened(false)
     })
   }, [])
@@ -128,8 +127,8 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   }
 
   //头像去重
-  const arrayUnique = (arr, name) => {
-    var hash = {};
+  const arrayUnique = (arr=[] as any[], name) => {
+    let hash = {};
     return arr.reduce(function (item, next) {
       hash[next[name]] ? '' : hash[next[name]] = true && item.push(next);
       return item;
@@ -173,10 +172,9 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         return
       }
       setSubjectList(produce(subjectList, draft => {
-        draft.push(...(_.filter(data, x => x.content)))
+        draft.push(...data)
       }))
       flag = false;
-      // setSubjectList(_.filter(data, x => x.content))
     }).catch(err => {
       flag = false
     })
@@ -209,7 +207,10 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         console.log("服务器错误");
         return
       }
-      setSubjectList(_.filter(data, x => x.content))
+      Taro.showToast({
+        title: '删除成功',
+      })
+      setSubjectList(data)
       setIsOpened(false)
     })
   }
@@ -240,37 +241,38 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         isOpened={isOpened}
       />
       <View className='page_home'>
-        {_.map(subjectList, (x, i) => {
-          return <View className='question_item'>
+        {
+          subjectList.map((item, i) => <View className='question_item'>
             <View className='questionlist_title'>
               <Text>第<Text className='questionlist_title_t' style={{ backgroundColor: '#' + getRandomColor(), width: '33px', height: '33px', lineHeight: '33px', textAlign: 'center', borderRadius: '50%', display: 'inline-block', opacity: 0.5 }}>{i + 1}</Text>题 </Text>
-              <Text className='questionlist_title_r'>题目分类:<Text className='questionlist_title_r_t'>{x.subject_type} </Text> </Text>
+              <Text className='questionlist_title_r'>题目分类:<Text className='questionlist_title_r_t'>{item.subject_type} </Text> </Text>
             </View>
             <View className='questionlist_con'>
-              <View> 创建时间:<Text className='questionlist_con_t'>{x.createTime}</Text>  </View>
-              <View><Text style={{ color: 'white', backgroundColor: 'rgb(20, 147, 220)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Question:</Text><ShowTitleView title={x.title} /></View>
-              <View><Text style={{ color: 'white', backgroundColor: 'rgb(104, 71, 219)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Answer:</Text><ShowAnswerView answer={x} /></View>
+              <View> 创建时间:<Text className='questionlist_con_t'>{item.createTime}</Text>  </View>
+              <View><Text style={{ color: 'white', backgroundColor: 'rgb(20, 147, 220)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Question:</Text><ShowTitleView title={item.title} /></View>
+              <View><Text style={{ color: 'white', backgroundColor: 'rgb(104, 71, 219)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Answer:</Text><ShowAnswerView answer={item} /></View>
               <View>
                 <View>点赞的用户头像列表</View>
-                {_.map(arrayUnique(x.thumbs, 'openid'), y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
+                {arrayUnique(item.thumbs, 'openid').map(y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
                 {
                   temporaryThumbs.map(item => {
-                    if (item.questionId == x._id) {
+                    if (item.questionId == item._id) {
                       return <Image src={item.userInfo.avatarUrl} style='width: 50px;height: 50px;' />
                     }
                   })
                 }
               </View>
               {
-                x.isDisable || temporaryThumbs.some(el => el.questionId == x._id) ? "" : <View onClick={() => handFabulous(x._id)}>👍</View>
+                item.isDisable || temporaryThumbs.some(el => el.questionId == item._id) ? "" : <View onClick={() => handFabulous(item._id)}>👍</View>
               }
-              <Button onClick={() => handDetail(x._id)}>点击进入详情</Button>
+              <Button onClick={() => handDetail(item._id)}>点击进入详情</Button>
               {
-                openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <Button onClick={() => handDelete(x._id)}>删除</Button>
+                openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <Button onClick={() => handDelete(item._id)}>删除</Button>
               }
             </View>
-          </View>
-        })}
+          </View>)
+        }
+
         {
           isOpened ? null : <AtDivider content={
             AtDividerText ? "没有更多了" : "正在加载数据"
