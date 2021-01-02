@@ -2,7 +2,7 @@
  * @description 
  * @author cq
  * @Date 2020-12-30 14:42:02
- * @LastEditTime 2020-12-30 17:49:48
+ * @LastEditTime 2021-01-02 22:58:54
  * @LastEditors cq
  */
 
@@ -10,95 +10,79 @@
 // 怎么 按照 h1 h2 h3的这种层级顺序渲染出来
 const arr = [
   {
-    commentId: "85ff8afa5fe1brrsf680067ed337c56a133",
-    createTime: "2020-12-22 09:42:00",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "2-1-1",
+    commentId: "98bb04175fef248a00f405f81c80d217",
+    createTime: "2021-01-01 13:33:55",
+    questionId: "a8831daa5fec73020126af6b2940f269",
+    text: "回复1-1的1-1-2",
     user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "85ff8afaddac5fe1brrsf680067ed337c56a133",
+    _id: "85ff8afa5fef24c401285c05361e3a60",
+  },
+  {
+    commentId: "98bb04175fef248a00f405f81c80d217",
+    createTime: "2021-01-01 13:33:35",
+    questionId: "a8831daa5fec73020126af6b2940f269",
+    text: "回复1-1的1-1-1",
+    user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
+    _id: "2424fa985fef24af0106b8f77f917199",
+  },
+  {
+    commentId: "2f6ab8515fef247600ebabef520933ce",
+    createTime: "2021-01-01 13:33:13",
+    questionId: "a8831daa5fec73020126af6b2940f269",
+    text: "回复第三条3-1",
+    user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
+    _id: "9f2a34705fef2499012c075e4669fe44",
+  },
+  {
+    commentId: "2f6ab8515fef246400ebab0350bf130a",
+    createTime: "2021-01-01 13:32:58",
+    questionId: "a8831daa5fec73020126af6b2940f269",
+    text: "回复第一条1-1",
+    user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
+    _id: "98bb04175fef248a00f405f81c80d217",
   },
   {
     commentId: "",
-    createTime: "2020-12-22 09:31:43",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "第一条评论内容",
+    createTime: "2021-01-01 13:32:38",
+    questionId: "a8831daa5fec73020126af6b2940f269",
+    text: "我是第三条",
     user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "2f6ab8515fe1bcff0052329b58feffb0",
-  },
-  {
-    commentId: "a8831daa5fe1bf170078aead0b32957c",
-    createTime: "2020-12-22 09:40:39",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "1-2-1-1的子评论",
-    user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "a8831daa5fe1bf170078aead0b32957c23",
+    _id: "2f6ab8515fef247600ebabef520933ce",
   },
   {
     commentId: "",
-    createTime: "2020-12-25 03:06:30",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "哈哈哈 ",
-    user_id: "o2ml-5V1_FtRRDA6JD74FVTwc6MM",
-    _id: "85ff8afa5fe557360095cdc659506bd0",
-  },
-  {
-    commentId: "2f6ab8515fe1bcff0052329b58feffb0",
-    createTime: "2020-12-22 09:39:41",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "1-2的子评论",
+    createTime: "2021-01-01 13:32:30",
+    questionId: "a8831daa5fec73020126af6b2940f269",
+    text: "我是第二条评论",
     user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "a8831daa5fe1bedd0078aa0416c85686",
-  },
-  {
-    commentId: "a8831daa5fe1bedd0078aa0416c85686",
-    createTime: "2020-12-22 09:40:39",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "1-2-1的子评论",
-    user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "a8831daa5fe1bf170078aead0b32957c",
-  },
-  {
-    commentId: "2f6ab8515fe1bcff0052329b58feffb0",
-    createTime: "2020-12-22 09:41:25",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "1-1的子评论",
-    user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "2424fa985fe1bf45005be4994a2d92bc",
+    _id: "98bb04175fef246e00f4046a439f441b",
   },
   {
     commentId: "",
-    createTime: "2020-12-22 09:42:00",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "第二条评论",
+    createTime: "2021-01-01 13:32:20",
+    questionId: "a8831daa5fec73020126af6b2940f269",
+    text: "我是第一条评论",
     user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "85ff8afa5fe1bf680067ed337c56a133",
+    _id: "2f6ab8515fef246400ebab0350bf130a",
   },
-  {
-    commentId: "85ff8afa5fe1bf680067ed337c56a133",
-    createTime: "2020-12-22 09:42:00",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "2-1",
-    user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "85ff8afa5fe1brrsf680067ed337c56a133",
-  },
-  {
-    commentId: "",
-    createTime: "2020-12-22 10:26:26",
-    questionId: "b1a52c595fbcc9ec005f6c8941bb6c43",
-    text: "第三条",
-    user_id: "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4",
-    _id: "2424fa985fe1c9d2005c99ca53cbec72",
-  }
 ]
 
+type newArrProps={
+  item:any,
+  children:any[]
+}
 
-function deep(array=[], commentId="", newArr=[]) {
+function deep(array = [], commentId = "", newArr = [] as newArrProps[]) {
   let arr = array.filter((item:any) => item.commentId == commentId);
   for (let index = 0; index < arr.length; index++) {
     const element:any = arr[index];
-    newArr.push(element as never)
-    if (array.some((el:any) => el.commentId == element._id)) {
-      deep(array, element._id, newArr)
+    newArr.push({
+      item: element,
+      children: []
+    }); //第一次把第一条评论放进来
+    const downObj = array.find((item:any) => item.commentId == newArr[newArr.length - 1].item._id);
+    if (downObj) {
+      deep(array, element._id, newArr[index].children)
     } else {
       continue
     }

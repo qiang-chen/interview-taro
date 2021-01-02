@@ -114,7 +114,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   }
 
   const handDetail = (id) => {
-    Taro.navigateTo({ url: `${pagePath.articalDetail}?id=${id}` })
+    Taro.navigateTo({ url: `${pagePath.questionDetail}?id=${id}` })
   }
 
   //随机颜色

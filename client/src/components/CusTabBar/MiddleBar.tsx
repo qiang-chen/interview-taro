@@ -2,7 +2,7 @@
  * @description 中间的 bar
  * @author cq
  * @Date 2019-12-01 15:10:00
- * @LastEditTime 2020-11-18 18:21:12
+ * @LastEditTime 2021-01-02 23:05:01
  * @LastEditors cq
  */
 import { View, Image } from '@tarojs/components'
