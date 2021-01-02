@@ -1,8 +1,8 @@
 /**
- * @description 详情页面
+ * @description 详情页面  暂时废弃
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-31 16:41:30
+ * @LastEditTime 2021-01-01 22:16:22
  * @LastEditors cq
  */
 

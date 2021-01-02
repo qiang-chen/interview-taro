@@ -2,8 +2,8 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2020-12-31 18:55:09
- * @LastEditors oyqx
+ * @LastEditTime 2021-01-02 22:50:14
+ * @LastEditors cq
  */
 
 
@@ -19,6 +19,7 @@ import pagePath from '@/config/pagePath';
 import { connect } from "react-redux";
 import deep from "./utils/index"
 import classNames from "classnames"
+import produce from 'immer';
 import { AtAvatar, AtList, AtListItem, AtButton, AtNoticebar, AtIcon, AtDivider, AtInput, AtFloatLayout } from 'taro-ui'
 import './index.scss'
 
@@ -31,26 +32,26 @@ type Iprops = QuestionDetailProps & Partial<UserInfo>
 
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
-
+let count = 1;
+let preItemCommentId = ""
 const ArticalDetail: React.FC<Iprops> = ({
   userInfo
 }) => {
 
   const [comment, setComment] = useState("");
   const [detailObj, setDetailObj] = useState<any>({});
-  const [commentList, setCommentList] = useState([]);
+  const [commentList, setCommentList] = useState<any>([]);
+  const [commentListAll, setCommentListAll] = useState<any>([]);//所有的评论
   const [commentId, setCommentId] = useState("");// 当前的评论IDcommentId
-
-
-
   const [isOpenInput, setOpenInput] = useState(false);
   const [curItem, setcurItem] = useState({})
   const [comment2, setComment2] = useState("");
 
+
   // let commentId = ""
   const router = useRouter();
   const { id } = router.params;
-  let preItem: any = {};
+  // let preItem: any = {};
 
 
   useEffect(() => {
@@ -68,16 +69,26 @@ const ArticalDetail: React.FC<Iprops> = ({
         console.log("服务器错误");
         return
       }
-      setCommentList(deep(data.comment.reverse(), "", []))
+      // setCommentList(deep(data.comment.reverse(), "", []));
+    
+      const array=deep(data.comment.reverse(), "", []);
+      setCommentListAll(data.comment.reverse());
+      let arr:any[]=[];
+      for (let index = 0; index < array.length; index++) {
+        arr.push(array[index]);
+        arr.push({})
+      }
+
+      arr.splice(arr.length-1,1)
+      setCommentList(arr)
       setDetailObj(data)
     })
   }, []);
 
   // 提交回复
-  const handComment = async (questionId) => {
-    // questionId 当前题目id  和当前评论ID  判断是不是第一层的
-
-    if (!comment) {
+  const handComment = async (type) => {
+    const com = type ? comment2 : comment;
+    if (!com) {
       Taro.showToast({
         title: '评论内容不能为空',
         icon: 'none'
@@ -92,7 +103,7 @@ const ArticalDetail: React.FC<Iprops> = ({
       data: {
         userInfo,
         questionId: id,
-        text: comment,
+        text: com,
         commentId,
       }
     })
@@ -124,65 +135,24 @@ const ArticalDetail: React.FC<Iprops> = ({
       console.log("获取最新评论失败");
       return
     }
-    setCommentList(deep(data, "", []))
+    const array = deep(data.reverse(), "", []);
+    setCommentListAll(data.reverse());
+    let arr: any[] = [];
+    for (let index = 0; index < array.length; index++) {
+      arr.push(array[index]);
+      arr.push({})
+    }
+
+    arr.splice(arr.length - 1, 1)
+    setCommentList(arr)
     setCommentId("")
-    setComment("")
+    if(type){
+      setComment2("")
+    }else{
+      setComment("")
+    }
   }
-  //提交评论
-  const handComment2 = async (questionId) => {
-    // questionId 当前题目id  和当前评论ID  判断是不是第一层的
-
-    if (!comment2) {
-      Taro.showToast({
-        title: '评论内容不能为空',
-        icon: 'none'
-      })
-      return
-    }
-
-    let saveRes = await Taro.cloud.callFunction({
-      // 要调用的云函数名称
-      name: 'saveComment',
-      // 传递给云函数的event参数
-      data: {
-        userInfo,
-        questionId: id,
-        text: comment2,
-        commentId,
-      }
-    })
-
-    const { result } = saveRes as any;
-    const { code: saveCode } = result as any;
-    if (!saveCode) {
-      Taro.showToast({
-        title: '保存失败',
-        icon: 'none'
-      })
-      return
-    }
-    setOpenInput(false)
-
-    Taro.showToast({
-      title: '保存成功'
-    })
-    const res = await Taro.cloud.callFunction({
-      // 要调用的云函数名称
-      name: 'getComment',
-      // 传递给云函数的event参数
-      data: {
-        questionId: detailObj._id
-      }
-    })
-    const { code, data } = res.result as any;
-    if (!code) {
-      console.log("获取最新评论失败");
-      return
-    }
-    setCommentList(deep(data, "", []))
-    setCommentId("")
-    setComment2("")
-  }
+ 
   const handCommentChange = (val) => {
     setComment(val)
   }
@@ -214,6 +184,70 @@ const ArticalDetail: React.FC<Iprops> = ({
   const handleChange = () => {
   }
   // console.log(66666777,userInfo)
+  // console.log(commentList,123);
+  const commentListDom = (arr = [] as any, domArr = [] as any[]) => {
+    count++;
+    console.log(arr,"arr");
+    for (let index = 0; index < arr.length; index++) {
+      const element = arr[index];
+      if (Object.keys(element).length) {
+        const item = element.item;
+        // if(index!=0){
+        //   console.log(item.commentId != arr[index - 1].item.commentId, item.commentId ,arr[index - 1].item.commentId);
+        //   if (item.commentId != arr[index - 1].item.commentId) {
+        //   }
+        // }
+        if (!item.commentId){
+          domArr.push(<View onClick={() => handCommentUser(item)}>
+            <View className='head-title'>
+              <View className='head-title2'>
+                <AtAvatar
+                  image={item.userInfo.avatarUrl}
+                  size={'small'}
+                  circle={true}></AtAvatar>
+                <View className='nickname'>
+                  <View className='nickNameOnly'> {item.userInfo.nickName}</View>
+                  <View>{item.createTime} </View>
+                </View>
+              </View>
+              <View>
+                {/* <AtIcon value='heart' size='30' color='#C4C4C4'></AtIcon> */}
+                {/* <View className='thumb'>👍</View> */}
+                <View className='thumb'>💬</View>
+                {/* <AtIcon value='iphone' size='30' color='#C4C4C4'></AtIcon> */}
+                {/* <AtButton size='small' circle={true} type='primary'>关注</AtButton> */}
+              </View>
+            </View>
+            <View className='at-article__p'>{item.text}</View>
+          </View>)
+        }else{
+          const preItem = commentListAll.find(el => el._id == item.commentId)
+          domArr.push(<View onClick={() => handCommentUser(item)}>
+            <View className='at-article__p commentContent'>
+              <View className='nickNameOnly'>{item.userInfo.nickName}</View>
+                  回复
+                <View className='nickNameOnly'>{preItem.userInfo && preItem.userInfo.nickName}&nbsp;</View> :
+            </View>
+            <View className='at-article__p'>{item.text}</View>
+          </View>)
+        }
+        if (element.children && element.children.length) {
+          // domArr.push(<AtDivider />)
+          commentListDom(element.children, domArr)
+        } else {
+          // console.log(arr, "arr");
+
+          // if ((arr.length-1)==index) {
+          //   domArr.push(<AtDivider />)
+          // }
+          continue
+        }
+      } else {
+        domArr.push(<AtDivider />)
+      }
+    }
+    return domArr;
+  }
   return <PageBarRoot hasTabBar>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
@@ -281,8 +315,6 @@ const ArticalDetail: React.FC<Iprops> = ({
         </View>
       </View>
 
-
-
       <AtFloatLayout isOpened={isOpenInput} title="" onClose={handleCloseInput}>
         <View>
           <AtInput
@@ -293,7 +325,7 @@ const ArticalDetail: React.FC<Iprops> = ({
             // '输入你的想法.....'
             onChange={handCommentChange}
           />
-          <AtButton onClick={() => handComment(detailObj.questionId)} className='addBtn'>提交评论</AtButton>
+          <AtButton onClick={() => handComment(0)} className='addBtn'>提交评论</AtButton>
         </View>
       </AtFloatLayout>
 
@@ -313,75 +345,16 @@ const ArticalDetail: React.FC<Iprops> = ({
           value={comment2}
           onChange={handCommentChange2}
         />
-        <AtButton 
-        size='small'
-        circle={true}
-        onClick={() => handComment2(detailObj.questionId)} 
-        className='addBtn'>提交评论</AtButton>
+        <AtButton
+          size='small'
+          circle={true}
+          onClick={() => handComment(1)}
+          className='addBtn'>提交评论</AtButton>
         {/* </View> */}
       </View>
 
       <View className='commentLists'>
-        {
-          commentList.map((item: any) => {
-            if (!item.commentId && !item.isEnd) {
-              preItem = item;
-              return <View onClick={() => handCommentUser(item)}>
-                <View className='head-title'>
-                  <View className='head-title2'>
-                    <AtAvatar
-                      image={item.userInfo.avatarUrl}
-                      size={'small'}
-                      circle={true}></AtAvatar>
-                    <View className='nickname'>
-                      <View className='nickNameOnly'> {item.userInfo.nickName}</View>
-                      <View>{item.createTime} </View>
-                    </View>
-                  </View>
-                  <View>
-                    {/* <AtIcon value='heart' size='30' color='#C4C4C4'></AtIcon> */}
-                    {/* <View className='thumb'>👍</View> */}
-                    <View className='thumb'>💬</View>
-                    {/* <AtIcon value='iphone' size='30' color='#C4C4C4'></AtIcon> */}
-                    {/* <AtButton size='small' circle={true} type='primary'>关注</AtButton> */}
-                  </View>
-                </View>
-                <View className='at-article__p'>{item.text}</View>
-              </View>
-
-              // <View
-              //   onClick={() => handCommentUser(item._id)}
-              //   className={classNames("one", {
-              //     "color": commentId == item._id
-              //   })}
-              // >
-              //   {item.userInfo.nickName}评论{detailObj.userInfo && detailObj.userInfo[0].userInfo.nickName}---{item.text}--{item.createTime}
-              // </View>
-            } else if (item.commentId) {
-              return <View onClick={() => handCommentUser(item)}>
-                <View className='at-article__p commentContent'>
-                  <View className='nickNameOnly'>{item.userInfo.nickName}</View>
-                  回复
-                <View className='nickNameOnly'>{preItem.userInfo && preItem.userInfo.nickName}&nbsp;</View> :
-            </View>
-                <View className='at-article__p'>{item.text}</View>
-              </View>
-              // <View
-              //   onClick={() => handCommentUser(item._id)}
-              //   className={classNames("two", {
-              //     "color": commentId == item._id
-              //   })}
-              // >
-              //   {item.userInfo.nickName}回复：{preItem.userInfo && preItem.userInfo.nickName}---{item.text}--{item.createTime}
-              //   </View>
-
-            } else if (item.isEnd) {
-              return <AtDivider />
-            }
-          })
-        }
-
-
+        {commentListDom(commentList, [])}
         {/* 
         <Input
           value={comment}
@@ -409,61 +382,6 @@ const ArticalDetail: React.FC<Iprops> = ({
 
 
     </View>
-
-    {/* <View></View> */}
-    {/* <View className='page-QuestionDetail'>
-      <View className='page-QuestionDetail'>
-        详情页面
-    </View>
-      <View>
-        标题： {title}
-      </View>
-      <View>
-        创建时间： {createTime}
-      </View>
-      {
-        content.ops && content.ops.map(item => {
-          if (item.attributes) {
-            // 图片
-            return <Image src={item.insert.image} />
-          } else {
-            // 文字
-            return <View>{item.insert}</View>
-          }
-        })
-      }
-
-      {
-        commentList.map((item: any) => {
-          if (!item.commentId) {
-            preItem=item;
-            return <View
-              onClick={() => handCommentUser(item._id)}
-              className={classNames("one", {
-                "color": commentId == item._id
-              })}
-            >
-              {item.userInfo.nickName}评论{detailObj.userInfo && detailObj.userInfo[0].userInfo.nickName}---{item.text}--{item.createTime}
-            </View>
-          } else {
-            return <View
-              onClick={() => handCommentUser(item._id)}
-              className={classNames("two", {
-                "color": commentId == item._id
-              })}
-            >
-              {item.userInfo.nickName}回复：{preItem.userInfo && preItem.userInfo.nickName}---{item.text}--{item.createTime}</View>
-          }
-        })
-      }
-      <Input
-        value={comment}
-        placeholder="请输入评论"
-        onInput={handCommentChange}
-      />
-      <Button onClick={() => handComment(detailObj.questionId)}>提交评论</Button>
-    </View>
-  */}
   </PageBarRoot>
 }
 
