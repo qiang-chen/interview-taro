@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2020-12-31 17:36:26
+ * @LastEditTime 2021-01-04 14:25:32
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -196,8 +196,8 @@ const QuestionInput: React.FC<Iprops> = ({
         userId: openid,
       }
     })
-    console.log(data);
-    if (!data.isReal) {
+    console.log(data.result.data,123);
+    if (!data.result.data.isReal) {
       setTipModal(true)
       return
     }
