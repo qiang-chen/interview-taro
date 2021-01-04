@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-02 23:06:25
+ * @LastEditTime 2021-01-04 14:52:13
  * @LastEditors cq
  */
 
@@ -175,7 +175,7 @@ const QuestionDetail: React.FC<Iprops> = ({
   const handleCloseInput = () => {
     setOpenInput(false)
   }
-  const { title, createTime, content = {}, thumbs = [], } = detailObj as any;
+  const { title, createTime, content = {}, thumbs = [], isDisable} = detailObj as any;
   const authorInfo = detailObj.userInfo && detailObj.userInfo.length && detailObj.userInfo[0].userInfo ? detailObj.userInfo[0].userInfo : {}
   const { nickName = '', avatarUrl = '' } = authorInfo
   const commentArr = detailObj.comment && detailObj.comment.length ? detailObj.comment : []
@@ -233,6 +233,38 @@ const QuestionDetail: React.FC<Iprops> = ({
     }
     return domArr;
   }
+
+  // 点赞
+  const handThumb=async ()=>{
+    await Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'thumbs',
+      // 传递给云函数的event参数
+      data: {
+        userInfo,
+        questionId: detailObj._id
+      }
+    })
+
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'subjectDetail',
+      // 传递给云函数的event参数
+      data: {
+        id
+      }
+    }).then(res => {
+      const { result } = res;
+      const { code, data } = result as any;
+      if (!code) {
+        console.log("服务器错误");
+        return
+      }
+      setDetailObj(data)
+    })
+    console.log(detailObj);
+  }
+
   return <PageBarRoot hasTabBar>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
@@ -284,8 +316,10 @@ const QuestionDetail: React.FC<Iprops> = ({
         <View className='thumbsAll'>
           <View className='thumbsLeft'>
             {/* <AtIcon value='heart' size='30' color='orange'></AtIcon> */}
-            <View className='thumb'>👍</View>
-            <View>{thumbs.length}</View>
+            {
+              !isDisable && <View className='thumb' onClick={handThumb}>👍</View>
+            }
+            <View className='thumbsLength'>{thumbs.length}</View>
           </View>
           <View className='thumbsRight'>
             {

@@ -2,7 +2,7 @@
  * @description 试题详情页面接口
  * @author cq
  * @Date 2020-12-22 15:15:22
- * @LastEditTime 2020-12-30 11:05:16
+ * @LastEditTime 2021-01-04 14:40:37
  * @LastEditors cq
  */
 
@@ -19,6 +19,8 @@ cloud.init({
 
 exports.main = async (event, context) => {
   const db = cloud.database();
+  const wxContext = await cloud.getWXContext();
+  const $ = db.command.aggregate;
   // 全局的工具类，在云函数中获取微信的调用上下文
   const { id } = event;
   let data = null;
@@ -47,6 +49,9 @@ exports.main = async (event, context) => {
         localField: "_id",
         foreignField: "questionId",
         as: "comment"
+      })
+      .addFields({
+        isDisable: $.in([wxContext.OPENID, '$thumbs.openid'])
       })
       .end();
     data = result.list[0]
