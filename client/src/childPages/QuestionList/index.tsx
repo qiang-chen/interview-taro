@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2021-01-02 23:41:34
+ * @LastEditTime 2021-01-04 15:35:47
  * @LastEditors cq
  */
 
@@ -45,7 +45,6 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
     pageSize: 10
   }); //分页器的选择
   const [isOpened, setIsOpened] = useState(true); //loading开关
-
   const [AtDividerText, setAtDividerText] = useState(0); //分割线的提示文案 0正在加载 1没有更多了
 
   const handleClickTitle = () => {
@@ -53,7 +52,6 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   }
 
   useEffect(() => {
-    console.log(Taro.getSystemInfoSync().windowHeight, 11111);
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'subject',
@@ -70,6 +68,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         return
       }
       setSubjectList(data)
+      flag = false;
       setIsOpened(false)
     })
   }, [])
