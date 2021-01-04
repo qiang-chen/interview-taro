@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-04 14:52:13
+ * @LastEditTime 2021-01-04 15:26:43
  * @LastEditors cq
  */
 
@@ -68,16 +68,16 @@ const QuestionDetail: React.FC<Iprops> = ({
         return
       }
       // setCommentList(deep(data.comment.reverse(), "", []));
-    
-      const array=deep(data.comment.reverse(), "", []);
+
+      const array = deep(data.comment.reverse(), "", []);
       setCommentListAll(data.comment.reverse());
-      let arr:any[]=[];
+      let arr: any[] = [];
       for (let index = 0; index < array.length; index++) {
         arr.push(array[index]);
         arr.push({})
       }
 
-      arr.splice(arr.length-1,1)
+      arr.splice(arr.length - 1, 1)
       setCommentList(arr)
       setDetailObj(data)
     })
@@ -144,13 +144,13 @@ const QuestionDetail: React.FC<Iprops> = ({
     arr.splice(arr.length - 1, 1)
     setCommentList(arr)
     setCommentId("")
-    if(type){
+    if (type) {
       setComment2("")
-    }else{
+    } else {
       setComment("")
     }
   }
- 
+
   const handCommentChange = (val) => {
     setComment(val)
   }
@@ -168,6 +168,7 @@ const QuestionDetail: React.FC<Iprops> = ({
   const handCommentUser = (item) => {
     setOpenInput(true)
     setCommentId(item._id)
+    console.log(item, "item");
     setcurItem(item)
     // commentId = commentId
   }
@@ -175,19 +176,20 @@ const QuestionDetail: React.FC<Iprops> = ({
   const handleCloseInput = () => {
     setOpenInput(false)
   }
-  const { title, createTime, content = {}, thumbs = [], isDisable} = detailObj as any;
+  const { title, createTime, content = {}, thumbs = [], isDisable } = detailObj as any;
   const authorInfo = detailObj.userInfo && detailObj.userInfo.length && detailObj.userInfo[0].userInfo ? detailObj.userInfo[0].userInfo : {}
   const { nickName = '', avatarUrl = '' } = authorInfo
   const commentArr = detailObj.comment && detailObj.comment.length ? detailObj.comment : []
   const handleChange = () => {
   }
- 
+
   const commentListDom = (arr = [] as any, domArr = [] as any[]) => {
+    console.log("报错了吗", arr);
     for (let index = 0; index < arr.length; index++) {
       const element = arr[index];
-      if (Object.keys(element).length) {
+      if (Object.keys(element || {}).length) {
         const item = element.item;
-        if (!item.commentId){
+        if (!item.commentId) {
           domArr.push(<View onClick={() => handCommentUser(item)}>
             <View className='head-title'>
               <View className='head-title2'>
@@ -210,15 +212,19 @@ const QuestionDetail: React.FC<Iprops> = ({
             </View>
             <View className='at-article__p'>{item.text}</View>
           </View>)
-        }else{
+        } else {
           const preItem = commentListAll.find(el => el._id == item.commentId)
-          domArr.push(<View onClick={() => handCommentUser(item)}>
-            <View className='at-article__p commentContent'>
-              <View className='nickNameOnly'>{item.userInfo.nickName}</View>
+          console.log(preItem, "有的是空？");
+          domArr.push(<View className="two_thumb" onClick={() => handCommentUser(item)}>
+            <View>
+              <View className='at-article__p commentContent'>
+                <View className='nickNameOnly'>{item.userInfo.nickName}</View>
                   回复
-                <View className='nickNameOnly'>{preItem.userInfo && preItem.userInfo.nickName}&nbsp;</View> :
+                <View className='nickNameOnly'>{preItem && preItem.userInfo && preItem.userInfo.nickName}&nbsp;</View> :
             </View>
-            <View className='at-article__p'>{item.text}</View>
+              <View className='at-article__p'>{item.text}</View>
+            </View>
+            <View className='thumb'>💬</View>
           </View>)
         }
         if (element.children && element.children.length) {
@@ -235,7 +241,7 @@ const QuestionDetail: React.FC<Iprops> = ({
   }
 
   // 点赞
-  const handThumb=async ()=>{
+  const handThumb = async () => {
     await Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'thumbs',
@@ -344,7 +350,7 @@ const QuestionDetail: React.FC<Iprops> = ({
             // '输入你的想法.....'
             onChange={handCommentChange}
           />
-          <AtButton onClick={() => handComment(0)} className='addBtn'>提交评论</AtButton>
+          <AtButton onClick={() => handComment(0)} className='addBtn'>提交回复</AtButton>
         </View>
       </AtFloatLayout>
 

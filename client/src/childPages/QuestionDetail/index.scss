@@ -100,3 +100,10 @@
 .thumb{
   font-size:36rpx;
 }
+
+.two_thumb{
+  display: flex;
+  justify-content: space-between;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
