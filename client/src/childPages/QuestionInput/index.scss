@@ -3,32 +3,59 @@
 }
 
 .page-home {
-    padding: 0 20px;
     background: #f7f7f7;
+    padding: 20px 0;
 }
 .page-home input {
     color: #666;
-    padding: 20px 20px;
+    padding: 20px 40px;
     font-weight: 600;
     font-size: 30px;
+    background: #fff;
+    border-radius: 20px;
 }
 
 .page-home .editor {
-    padding: 0 20px;
+    padding: 20px 40px;
     color: #666;
     font-size: 28px;
+    background: #fff;
+    margin: 20px 0;
+}
+.page-home .editor::-webkit-input-placeholder {
+    font-style: normal !important;
 }
 
 .item-extra .item-extra__info {
     min-width: 100px;
     height: 46px;
-    background-color: rgb(51, 153, 255);
     color: #fff;
     border-radius: 50px;
     line-height: 45px;
     text-align: center;
-    font-size: 28px;
+    font-size: 26px;
     padding: 0 15px;
+}
+
+.item-extra_bgcolor .item-extra__info {
+    background-color: rgb(236, 61, 41);
+}
+
+.item-extra_bgnone .item-extra__info{
+    background-color: rgb(69, 162, 255);
+    // background-color: rgb(76, 230, 215);
+}
+
+.page-home input  {
+    border: none !important;
+}
+
+.at-list__item::after {
+    border: 0 !important;
+}
+.at-list::after {
+    border-top-width: 0 !important;
+    border-bottom-width: 0 !important;
 }
 
 .btn{

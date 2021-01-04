@@ -15,7 +15,7 @@ import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
 import PageBarRoot from '@/containers/PageBarRoot';
-import { AtFloatLayout, AtSwipeAction, AtModal, AtToast, AtList, AtListItem, AtInput, AtButton, AtDivider } from 'taro-ui'
+import { AtFloatLayout, AtSwipeAction, AtModal, AtToast, AtList, AtListItem, AtInput, AtButton } from 'taro-ui'
 import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { UserInfo } from "@/ts-types/store";
@@ -196,7 +196,7 @@ const QuestionInput: React.FC<Iprops> = ({
         userId: openid,
       }
     })
-    console.log(data.result.data,123);
+    console.log(data.result.data, 123);
     if (!data.result.data.isReal) {
       setTipModal(true)
       return
@@ -280,6 +280,7 @@ const QuestionInput: React.FC<Iprops> = ({
             <AtListItem
               title='题目分类'
               extraText={selectorChecked}
+              className={selectorChecked === '暂无匹配' ? 'item-extra_bgcolor' : 'item-extra_bgnone'}
             />
           </AtList>
         </Picker>
@@ -293,7 +294,6 @@ const QuestionInput: React.FC<Iprops> = ({
         value={titleValue}
         onInput={handInput}
       />
-      <AtDivider content='分割线' />
       <Editor
         id='editor'
         className='editor'
