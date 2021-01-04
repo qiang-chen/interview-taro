@@ -2,10 +2,10 @@
  * @description 我的 页面
  * @author ronffy
  * @Date 2019-12-09 16:25:35
- * @LastEditTime 2021-01-02 23:03:04
+ * @LastEditTime 2021-01-04 15:59:58
  * @LastEditors cq
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Taro, { ComponentClass, useShareAppMessage } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar';
@@ -20,6 +20,7 @@ import PageBarRoot from '@/containers/PageBarRoot';
 import pagePath from '@/config/pagePath';
 import CusShare from "@/components/CusShare"
 import './index.scss'
+import { AtAvatar } from 'taro-ui';
 
 
 const { ossOriginAddSalt, defaultAvatarUrl } = config;
@@ -31,6 +32,7 @@ const defaultUserInfo = {
 
 interface MineStateProps {
   userInfo: UserInfo
+  openid:string
 }
 
 export interface MineProps extends MineStateProps {
@@ -39,7 +41,29 @@ export interface MineProps extends MineStateProps {
 
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
-const Mine: React.FC<MineProps> = ({ userInfo }) => {
+const Mine: React.FC<MineProps> = ({ userInfo, openid }) => {
+
+  const [integral, setIntegral] = useState(null);  //个人积分
+
+  useEffect(() => {
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'getIntegral',
+      data: {
+        openid
+      }
+    }).then((res:any)=>{
+      const result:any = res.result;
+      if (!result.code){
+        Taro.showToast({
+          title: '积分查询失败',
+          icon: 'none'
+        })
+        return
+      }
+      setIntegral(result.data[0].integral)
+    })
+  }, [])
 
   const handContact=async ()=>{
     const result=await Taro.cloud.callFunction({
@@ -50,7 +74,6 @@ const Mine: React.FC<MineProps> = ({ userInfo }) => {
         type: "reduce"
       }
     })
-    console.log();
     const { code, data } = result.result as any;
     if (!code){
       Taro.showToast({
@@ -69,6 +92,16 @@ const Mine: React.FC<MineProps> = ({ userInfo }) => {
         <CusNavBar>我的</CusNavBar>
 
         <View className='page-mine'>
+          <AtAvatar
+            image={userInfo.avatarUrl}
+            size={'small'}
+            circle={true}></AtAvatar>
+          <View className='nickname'>
+            <View className='nickNameOnly'> {userInfo.nickName}</View>
+          </View>
+          <View>
+            个人积分： {integral}
+          </View>
           <Button
             openType="share"
             title="分享标题"
@@ -78,7 +111,6 @@ const Mine: React.FC<MineProps> = ({ userInfo }) => {
           <Button onClick={handContact}>
             查看个人联系方式 消耗3个积分
           </Button>
-      wode
       </View>
       </CusShare>
       {/* tabBar */}
@@ -87,5 +119,11 @@ const Mine: React.FC<MineProps> = ({ userInfo }) => {
   );
 }
 
+function mapStateToProps(state) {
+  return ({
+    userInfo: state.app.userInfo,
+    openid: state.app.openid
+  })
+}
 
-export default Mine
+export default connect(mapStateToProps)(Mine as any) 
