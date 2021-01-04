@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-04 15:26:43
+ * @LastEditTime 2021-01-04 17:18:16
  * @LastEditors cq
  */
 
@@ -33,9 +33,9 @@ type Iprops = QuestionDetailProps & Partial<UserInfo>
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
 const QuestionDetail: React.FC<Iprops> = ({
-  userInfo
+  userInfo,
+  openid
 }) => {
-
   const [comment, setComment] = useState("");
   const [detailObj, setDetailObj] = useState<any>({});
   const [commentList, setCommentList] = useState<any>([]);
@@ -82,6 +82,54 @@ const QuestionDetail: React.FC<Iprops> = ({
       setDetailObj(data)
     })
   }, []);
+
+  // 删除评论 deleteComment
+  const handCommentRemove = async (item) => {
+    const { _id } = item;
+    try {
+      await Taro.cloud.callFunction({
+        // 要调用的云函数名称
+        name: 'deleteComment',
+        // 传递给云函数的event参数
+        data: {
+          id: _id
+        }
+      })
+
+      const res = await Taro.cloud.callFunction({
+        // 要调用的云函数名称
+        name: 'getComment',
+        // 传递给云函数的event参数
+        data: {
+          questionId: detailObj._id
+        }
+      })
+      const { code, data } = res.result as any;
+      if (!code) {
+        console.log("获取最新评论失败");
+        return
+      }
+      const array = deep(data.reverse(), "", []);
+      setCommentListAll(data.reverse());
+      let arr: any[] = [];
+      for (let index = 0; index < array.length; index++) {
+        arr.push(array[index]);
+        arr.push({})
+      }
+
+      arr.splice(arr.length - 1, 1)
+      setCommentList(arr)
+      console.log("没执行吗");
+      Taro.showToast({
+        title: '删除成功',
+      })
+    } catch (error) {
+      Taro.showToast({
+        title: '删除失败',
+        icon: "none"
+      })
+    }
+  }
 
   // 提交回复
   const handComment = async (type) => {
@@ -168,7 +216,6 @@ const QuestionDetail: React.FC<Iprops> = ({
   const handCommentUser = (item) => {
     setOpenInput(true)
     setCommentId(item._id)
-    console.log(item, "item");
     setcurItem(item)
     // commentId = commentId
   }
@@ -184,13 +231,12 @@ const QuestionDetail: React.FC<Iprops> = ({
   }
 
   const commentListDom = (arr = [] as any, domArr = [] as any[]) => {
-    console.log("报错了吗", arr);
     for (let index = 0; index < arr.length; index++) {
       const element = arr[index];
       if (Object.keys(element || {}).length) {
         const item = element.item;
         if (!item.commentId) {
-          domArr.push(<View onClick={() => handCommentUser(item)}>
+          domArr.push(<View>
             <View className='head-title'>
               <View className='head-title2'>
                 <AtAvatar
@@ -205,7 +251,10 @@ const QuestionDetail: React.FC<Iprops> = ({
               <View>
                 {/* <AtIcon value='heart' size='30' color='#C4C4C4'></AtIcon> */}
                 {/* <View className='thumb'>👍</View> */}
-                <View className='thumb'>💬</View>
+                <View className='thumb' onClick={() => handCommentUser(item)}>💬</View>
+                {
+                  openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <View className='thumb' onClick={() => handCommentRemove(item)}>删除</View>
+                }
                 {/* <AtIcon value='iphone' size='30' color='#C4C4C4'></AtIcon> */}
                 {/* <AtButton size='small' circle={true} type='primary'>关注</AtButton> */}
               </View>
@@ -214,8 +263,7 @@ const QuestionDetail: React.FC<Iprops> = ({
           </View>)
         } else {
           const preItem = commentListAll.find(el => el._id == item.commentId)
-          console.log(preItem, "有的是空？");
-          domArr.push(<View className="two_thumb" onClick={() => handCommentUser(item)}>
+          domArr.push(<View className="two_thumb">
             <View>
               <View className='at-article__p commentContent'>
                 <View className='nickNameOnly'>{item.userInfo.nickName}</View>
@@ -224,7 +272,10 @@ const QuestionDetail: React.FC<Iprops> = ({
             </View>
               <View className='at-article__p'>{item.text}</View>
             </View>
-            <View className='thumb'>💬</View>
+            <View className='thumb' onClick={() => handCommentUser(item)}>💬</View>
+            {
+              openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <View className='thumb' onClick={() => handCommentRemove(item)}>删除</View>
+            }
           </View>)
         }
         if (element.children && element.children.length) {
@@ -380,32 +431,7 @@ const QuestionDetail: React.FC<Iprops> = ({
 
       <View className='commentLists'>
         {commentListDom(commentList, [])}
-        {/* 
-        <Input
-          value={comment}
-          placeholder="请输入评论"
-          onInput={handCommentChange}
-        />
-        <Button onClick={() => handComment(detailObj.questionId)}>提交评论</Button> */}
-
-        {/* 
-        {
-          commentArr.map((item) =>
-            <View className='commentItem'>
-
-
-
-       
-            </View>
-          )
-        } */}
       </View>
-
-
-
-
-
-
     </View>
   </PageBarRoot>
 }
