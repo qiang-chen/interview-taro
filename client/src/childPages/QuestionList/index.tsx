@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2021-01-04 15:35:47
+ * @LastEditTime 2021-01-04 20:27:34
  * @LastEditors cq
  */
 
@@ -79,16 +79,16 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
       url: pagePath.home
     })
   }
-
   // 点赞
   const handFabulous = (questionId) => {
-
-    setTemporaryThumbs(produce(temporaryThumbs, draft => {
+    const itemArr:any = produce(temporaryThumbs, draft => {
       draft.push({
         questionId,
         userInfo
       })
-    }))
+      return draft
+    })
+    setTemporaryThumbs([...temporaryThumbs, ...itemArr])
 
     Taro.cloud.callFunction({
       // 要调用的云函数名称
@@ -254,9 +254,9 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
                 <View>点赞的用户头像列表</View>
                 {arrayUnique(item.thumbs, 'openid').map(y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
                 {
-                  temporaryThumbs.map(item => {
-                    if (item.questionId == item._id) {
-                      return <Image src={item.userInfo.avatarUrl} style='width: 50px;height: 50px;' />
+                  temporaryThumbs.map(el => {
+                    if (el.questionId == item._id) {
+                      return <Image src={el.userInfo.avatarUrl} style='width: 50px;height: 50px;' />
                     }
                   })
                 }

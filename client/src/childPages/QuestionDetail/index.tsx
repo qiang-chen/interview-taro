@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-04 17:18:16
+ * @LastEditTime 2021-01-04 21:03:14
  * @LastEditors cq
  */
 
@@ -21,6 +21,7 @@ import deep from "./utils/index"
 import classNames from "classnames"
 import produce from 'immer';
 import { AtAvatar, AtList, AtListItem, AtButton, AtNoticebar, AtIcon, AtDivider, AtInput, AtFloatLayout } from 'taro-ui'
+import '@tarojs/taro/html.css'
 import './index.scss'
 
 
@@ -353,6 +354,7 @@ const QuestionDetail: React.FC<Iprops> = ({
         <View className='at-article__section'>
           {
             content.ops && content.ops.map(item => {
+              console.log(item.insert);
               if (item.attributes) {
                 // 图片
                 return <Image
@@ -361,8 +363,8 @@ const QuestionDetail: React.FC<Iprops> = ({
                   src={item.insert.image}
                 />
               } else {
-                // 文字
-                return <View className='at-article__p'>{item.insert}</View>
+                // 文字 at-article__p 
+                return <View className='at-article__p taro_html' dangerouslySetInnerHTML={{__html:item.insert && item.insert.replace(/\n/g, "<br/>")}}></View>
               }
             })
           }
