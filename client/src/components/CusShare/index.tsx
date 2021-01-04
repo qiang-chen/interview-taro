@@ -2,7 +2,7 @@
  * @description 分享拦截
  * @author cq
  * @Date 2020-12-09 14:07:14
- * @LastEditTime 2020-12-09 16:21:20
+ * @LastEditTime 2021-01-04 16:07:21
  * @LastEditors cq
  */
 import React, { useEffect } from 'react';
@@ -16,11 +16,12 @@ import pagePath from '@/config/pagePath';
 
 interface IProps {
   children: any
+  onSuccess?:()=>void
 }
 
 // #----------- 上: ts类型定义 ----------- 分割线 ----------- 下: JS代码 -----------
 
-const CusShare: React.FC<IProps> = ({ children }) => {
+const CusShare: React.FC<IProps> = ({ children,onSuccess }) => {
   useShareAppMessage(res => {
     console.log(res, 111);
     Taro.cloud.callFunction({
@@ -30,6 +31,8 @@ const CusShare: React.FC<IProps> = ({ children }) => {
         integral: 1,
         type: "add"
       }
+    }).then(res=>{
+      onSuccess()
     })
     if (res.from === 'button') {
       // 来自页面内转发按钮

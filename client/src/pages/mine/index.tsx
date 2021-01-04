@@ -2,7 +2,7 @@
  * @description 我的 页面
  * @author ronffy
  * @Date 2019-12-09 16:25:35
- * @LastEditTime 2021-01-04 15:59:58
+ * @LastEditTime 2021-01-04 16:10:16
  * @LastEditors cq
  */
 import React, { useEffect, useState } from 'react';
@@ -84,10 +84,16 @@ const Mine: React.FC<MineProps> = ({ userInfo, openid }) => {
     }
     Taro.navigateTo({ url: pagePath.contact })
   }
+  const handSuccess=()=>{
+    console.log("执行了吗");
+    if (typeof integral=='number'){
+      setIntegral(integral + 1)
+    }
+  }
 
   return (
     <PageBarRoot hasTabBar>
-      <CusShare>
+      <CusShare onSuccess={handSuccess}>
         {/* navBar */}
         <CusNavBar>我的</CusNavBar>
 
