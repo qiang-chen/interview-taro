@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2021-01-05 11:06:20
+ * @LastEditTime 2021-01-05 11:10:01
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -44,7 +44,7 @@ const QuestionInput: React.FC<Iprops> = ({
   const [editorCtx, setEditorCtx] = useState(null) as any;
   // const [editorCtx, seteditorCtx]
   const [titleValue, setTitleValue] = useState("");
-  const selector = ["vue", "react", "js", "node", "php", "java", "暂无匹配"]
+  const selector = ["vue", "react", "js", "css", "http", "node", "html", "php", "java", "暂无匹配"]
   const [selectorChecked, setSelectorChecked] = useState("暂无匹配"); //上拉菜单的默认选择
   const [phoneValue, setPhoneValue] = useState("");  //输入自己的手机号
   const [tipModal, setTipModal] = useState(false); // 输入手机号提示框
@@ -59,7 +59,7 @@ const QuestionInput: React.FC<Iprops> = ({
     Taro.reLaunch({
       url: pagePath.home
     });
-    
+
   }
 
   useEffect(() => {
