@@ -109,6 +109,7 @@
 
 .two_thumb {
   display: flex;
+  width: 100%;
   justify-content: space-between;
   padding-right: 20px;
   box-sizing: border-box;
@@ -118,4 +119,11 @@
   text-indent: 36px;
   font-size: 16px;
   font-weight: 300;
+}
+
+.at-article__comment {
+  font-size: 34px;
+  padding-left: 33px;
+  margin-top: 5px;
+  box-sizing: border-box;
 }

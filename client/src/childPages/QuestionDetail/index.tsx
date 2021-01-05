@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-05 15:25:51
+ * @LastEditTime 2021-01-05 19:41:35
  * @LastEditors cq
  */
 
@@ -261,23 +261,26 @@ const QuestionDetail: React.FC<Iprops> = ({
                 {/* <AtButton size='small' circle={true} type='primary'>关注</AtButton> */}
               </View>
             </View>
-            <View className='at-article__p'>{item.text}</View>
+            <View className='at-article__comment'>{item.text}</View>
           </View>)
         } else {
           const preItem = commentListAll.find(el => el._id == item.commentId)
           domArr.push(<View className="two_thumb">
             <View>
-              <View className='at-article__p commentContent'>
+              <View className='at-article__comment commentContent'>
                 <View className='nickNameOnly'>{item.userInfo.nickName}</View>
                   回复
                 <View className='nickNameOnly'>{preItem && preItem.userInfo && preItem.userInfo.nickName}&nbsp;</View> :
             </View>
-              <View className='at-article__p'>{item.text}</View>
+              <View className='at-article__comment'>{item.text}</View>
             </View>
-            <View className='thumb' onClick={() => handCommentUser(item)}>💬</View>
-            {
-              openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <View className='thumb' onClick={() => handCommentRemove(item)}>删除</View>
-            }
+            <View>
+              <View className='thumb' onClick={() => handCommentUser(item)}>💬</View>
+              {
+                openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <View className='thumb' onClick={() => handCommentRemove(item)}>删除</View>
+              }
+            </View>
+
           </View>)
         }
         if (element.children && element.children.length) {
@@ -365,7 +368,7 @@ const QuestionDetail: React.FC<Iprops> = ({
                 />
               } else {
                 // 文字 at-article__p 
-                return <View className='at-article__p taro_html' dangerouslySetInnerHTML={{ __html: item.insert && `<h1>${item.insert.replace(/\n/g, "</h1><h1>")}</h1>`}}></View>
+                return <View className='at-article__p taro_html' dangerouslySetInnerHTML={{ __html: item.insert && `<h1>${item.insert.replace(/\n/g, "</h1><h1>")}</h1>` }}></View>
               }
             })
           }
