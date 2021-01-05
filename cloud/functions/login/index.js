@@ -2,7 +2,7 @@
  * @description 登陆相关操作
  * @author cq
  * @Date 2020-11-19 14:21:46
- * @LastEditTime 2020-12-17 16:19:17
+ * @LastEditTime 2021-01-05 16:33:03
  * @LastEditors cq
  */
 // 云函数模板
@@ -39,6 +39,20 @@ exports.main = async (event, context) => {
       openid: wxContext.OPENID
     }).get();
     console.log(result.data,22222)
+    function time(date) {
+      const y = date.getFullYear()
+      let m = date.getMonth() + 1
+      m = m < 10 ? '0' + m : m
+      let d = date.getDate()
+      d = d < 10 ? '0' + d : d
+      let h = date.getHours()
+      h = h < 10 ? '0' + h : h
+      let minute = date.getMinutes()
+      minute = minute < 10 ? '0' + minute : minute
+      let second = date.getSeconds()
+      second = second < 10 ? '0' + second : second
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+    }
     if (result.data.length) {
       // 此用户已经注册过了
       db.collection('users').where({
@@ -56,7 +70,7 @@ exports.main = async (event, context) => {
     } else {
       data = await db.collection('users').add({
         data: {
-          created: new Date(),
+          created: time(new Date()),
           userInfo: event.userInfo,
           openid: wxContext.OPENID,
           integral:0

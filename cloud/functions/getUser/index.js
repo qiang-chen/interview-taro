@@ -2,7 +2,7 @@
  * @description 获取注册列表
  * @author cq
  * @Date 2021-01-05 15:03:05
- * @LastEditTime 2021-01-05 15:29:30
+ * @LastEditTime 2021-01-05 16:33:33
  * @LastEditors cq
  */
 
@@ -23,7 +23,7 @@ exports.main = async (event, context) => {
     let result = await db.collection('users')
       .aggregate()
       .sort({      //聚合阶段不能和orderBy连用   需要用sort进行排序使用
-        createTime: 1
+        created: -1
       })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
