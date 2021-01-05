@@ -2,7 +2,7 @@
  * @description 全局的 tabBar
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2021-01-02 23:02:15
+ * @LastEditTime 2021-01-05 14:35:18
  * @LastEditors cq
  */
 
@@ -71,11 +71,11 @@ const AppTabBar: React.FC<AppTabBarProps> = ({
   }, userInfo)
 
   const handleClickMiddle = listenUserInfo.createListener(() => {
-    Taro.navigateTo({ url: pagePath.questionList })
+    Taro.navigateTo({ url: pagePath.questionInput })
   }, userInfo)
 
   return (
-    <GetUserInfo onGetUserInfo={handleGetUserInfo}>
+    <GetUserInfo userInfo={userInfo} onGetUserInfo={handleGetUserInfo}>
       <CusTabBar
         fixed
         tabList={[

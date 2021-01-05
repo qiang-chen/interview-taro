@@ -2,7 +2,7 @@
  * @description render 函数 获取用户信息
  * @author cq
  * @Date 2020-11-18 13:54:35
- * @LastEditTime 2020-11-23 10:42:33
+ * @LastEditTime 2021-01-05 14:28:38
  * @LastEditors cq
  */
 
@@ -43,6 +43,7 @@ const GetUserInfo: React.FC<GetUserInfoProps> = ({
   children
 }) => {
   const handleGetUserInfo = async (e) => {
+    console.log(isEmpty(userInfo), "是否授权过", userInfo);
     if (!isEmpty(userInfo)) {
       // 授权过停止
       return;
