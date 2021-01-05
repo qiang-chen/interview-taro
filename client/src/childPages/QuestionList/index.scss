@@ -58,3 +58,18 @@
     }
   }
 }
+
+.thumbsRight {
+  display: flex;
+  overflow-x: scroll;
+
+  .thumbsAvatar {
+    margin: 0 6rpx;
+  }
+  margin-bottom: 20px;
+}
+
+.thumbs_color{
+  color: #fff;
+  margin-bottom: 20px;
+}

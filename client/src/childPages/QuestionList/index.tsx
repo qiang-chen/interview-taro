@@ -3,18 +3,18 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2021-01-05 11:05:05
+ * @LastEditTime 2021-01-05 16:02:49
  * @LastEditors cq
  */
 
 
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { View, Text, Image, Editor, Button, Input, ScrollView } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
 import PageBarRoot from '@/containers/PageBarRoot';
-import { AtFloatLayout, AtSwipeAction, AtModal, AtToast, AtDivider, AtActivityIndicator } from 'taro-ui'
+import { AtFloatLayout, AtSwipeAction, AtModal, AtToast, AtDivider, AtActivityIndicator, AtAvatar } from 'taro-ui'
 import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { HomeState } from "@/ts-types/store/index";
@@ -45,13 +45,13 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
     pageSize: 10
   }); //分页器的选择
   const [isOpened, setIsOpened] = useState(true); //loading开关
-  const [AtDividerText, setAtDividerText] = useState(0); //分割线的提示文案 0正在加载 1没有更多了
+  const [atDividerText, setAtDividerText] = useState(0); //分割线的提示文案 0正在加载 1没有更多了
 
   const handleClickTitle = () => {
     console.log("点击首页标题")
   }
 
-  useEffect(() => {
+  useDidShow(() => {
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'subject',
@@ -67,11 +67,15 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         console.log("服务器错误");
         return
       }
+      setPageObj({
+        page: 1,
+        pageSize: 10
+      })
       setSubjectList(data)
       flag = false;
       setIsOpened(false)
     })
-  }, [])
+  })
 
   // 返回上一级
   const handleClickBack = () => {
@@ -82,7 +86,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   }
   // 点赞
   const handFabulous = (questionId) => {
-    const itemArr:any = produce(temporaryThumbs, draft => {
+    const itemArr: any = produce(temporaryThumbs, draft => {
       draft.push({
         questionId,
         userInfo
@@ -127,7 +131,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
   }
 
   //头像去重
-  const arrayUnique = (arr=[] as any[], name) => {
+  const arrayUnique = (arr = [] as any[], name) => {
     let hash = {};
     return arr.reduce(function (item, next) {
       hash[next[name]] ? '' : hash[next[name]] = true && item.push(next);
@@ -137,7 +141,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
 
   const onScrollToLower = (e) => {
     console.log(flag, "onScrollToLower");
-    if (AtDividerText) {
+    if (atDividerText) {
       // 没数据了
       return
     }
@@ -214,7 +218,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
       setIsOpened(false)
     })
   }
-  return <PageBarRoot hasTabBar>
+  return <PageBarRoot hasTabBar={false}>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
       <View onClick={handleClickTitle}>
@@ -252,15 +256,30 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
               <View><Text style={{ color: 'white', backgroundColor: 'rgb(20, 147, 220)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Question:</Text><ShowTitleView title={item.title} /></View>
               <View><Text style={{ color: 'white', backgroundColor: 'rgb(104, 71, 219)', borderRadius: '8px 8px 8px 0', width: '100px', display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Answer:</Text><ShowAnswerView answer={item} /></View>
               <View>
-                <View>点赞的用户头像列表</View>
-                {arrayUnique(item.thumbs, 'openid').map(y => <Image src={y.userInfo.avatarUrl} style='width: 50px;height: 50px;' />)}
-                {
-                  temporaryThumbs.map(el => {
-                    if (el.questionId == item._id) {
-                      return <Image src={el.userInfo.avatarUrl} style='width: 50px;height: 50px;' />
-                    }
-                  })
-                }
+                <View className='thumbs_color'>点赞的用户头像列表:</View>
+                <View className='thumbsRight'>
+                  {
+                    arrayUnique(item.thumbs, 'openid').map((y) =>
+                      <View className='thumbsAvatar'>
+                        <AtAvatar
+                          image={y.userInfo.avatarUrl}
+                          size={'small'}
+                          circle={true} />
+                      </View>)
+                  }
+                  {
+                    temporaryThumbs.map(el => {
+                      if (el.questionId == item._id) {
+                        return <View className='thumbsAvatar'>
+                          <AtAvatar
+                            image={el.userInfo.avatarUrl}
+                            size={'small'}
+                            circle={true} />
+                        </View>
+                      }
+                    })
+                  }
+                </View>
               </View>
               {
                 item.isDisable || temporaryThumbs.some(el => el.questionId == item._id) ? "" : <View onClick={() => handFabulous(item._id)}>👍</View>
@@ -275,7 +294,7 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
 
         {
           isOpened ? null : <AtDivider content={
-            AtDividerText ? "没有更多了" : "正在加载数据"
+            atDividerText ? "没有更多了" : "正在加载数据"
           } fontColor='#ed3f14' lineColor='#ed3f14'
           />
         }

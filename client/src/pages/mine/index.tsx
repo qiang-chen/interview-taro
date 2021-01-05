@@ -2,11 +2,11 @@
  * @description 我的 页面
  * @author ronffy
  * @Date 2019-12-09 16:25:35
- * @LastEditTime 2021-01-04 16:10:16
+ * @LastEditTime 2021-01-05 15:49:47
  * @LastEditors cq
  */
 import React, { useEffect, useState } from 'react';
-import Taro, { ComponentClass, useShareAppMessage } from '@tarojs/taro'
+import Taro, { ComponentClass, useDidShow, useShareAppMessage } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar';
 import CusList from '@/components/CusList';
@@ -32,7 +32,7 @@ const defaultUserInfo = {
 
 interface MineStateProps {
   userInfo: UserInfo
-  openid:string
+  openid: string
 }
 
 export interface MineProps extends MineStateProps {
@@ -45,16 +45,16 @@ const Mine: React.FC<MineProps> = ({ userInfo, openid }) => {
 
   const [integral, setIntegral] = useState(null);  //个人积分
 
-  useEffect(() => {
+  useDidShow(() => {
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'getIntegral',
       data: {
         openid
       }
-    }).then((res:any)=>{
-      const result:any = res.result;
-      if (!result.code){
+    }).then((res: any) => {
+      const result: any = res.result;
+      if (!result.code) {
         Taro.showToast({
           title: '积分查询失败',
           icon: 'none'
@@ -63,10 +63,14 @@ const Mine: React.FC<MineProps> = ({ userInfo, openid }) => {
       }
       setIntegral(result.data[0].integral)
     })
-  }, [])
+  })
 
-  const handContact=async ()=>{
-    const result=await Taro.cloud.callFunction({
+  // useEffect(() => {
+    
+  // }, [])
+
+  const handContact = async () => {
+    const result = await Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'updateIntegral',
       data: {
@@ -75,7 +79,7 @@ const Mine: React.FC<MineProps> = ({ userInfo, openid }) => {
       }
     })
     const { code, data } = result.result as any;
-    if (!code){
+    if (!code) {
       Taro.showToast({
         title: data,
         icon: 'none'
@@ -84,9 +88,31 @@ const Mine: React.FC<MineProps> = ({ userInfo, openid }) => {
     }
     Taro.navigateTo({ url: pagePath.contact })
   }
-  const handSuccess=()=>{
+
+  const handVisitors = async () => {
+    const result = await Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'updateIntegral',
+      data: {
+        integral: 5,
+        type: "reduce"
+      }
+    })
+    const { code, data } = result.result as any;
+    if (!code) {
+      Taro.showToast({
+        title: data,
+        icon: 'none'
+      })
+      return
+    }
+    Taro.navigateTo({ url: pagePath.visitors })
+  }
+
+
+  const handSuccess = () => {
     console.log("执行了吗");
-    if (typeof integral=='number'){
+    if (typeof integral == 'number') {
       setIntegral(integral + 1)
     }
   }
@@ -115,9 +141,13 @@ const Mine: React.FC<MineProps> = ({ userInfo, openid }) => {
           >分享好友 加1个积分</Button>
 
           <Button onClick={handContact}>
-            查看个人联系方式 消耗3个积分
+            查看开发者的联系方式以及福利领取 消耗3个积分
           </Button>
-      </View>
+
+          <Button onClick={handVisitors}>
+            寻好友 消耗5个积分
+          </Button>
+        </View>
       </CusShare>
       {/* tabBar */}
       <AppTabBar current={3} />

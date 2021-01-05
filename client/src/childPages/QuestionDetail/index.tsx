@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-05 11:16:42
+ * @LastEditTime 2021-01-05 15:25:51
  * @LastEditors cq
  */
 
@@ -324,7 +324,7 @@ const QuestionDetail: React.FC<Iprops> = ({
     console.log(detailObj);
   }
 
-  return <PageBarRoot hasTabBar>
+  return <PageBarRoot hasTabBar={false}>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
       <View>

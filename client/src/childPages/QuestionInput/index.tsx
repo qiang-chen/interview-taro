@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2021-01-05 11:10:01
+ * @LastEditTime 2021-01-05 15:25:37
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -265,7 +265,7 @@ const QuestionInput: React.FC<Iprops> = ({
 
   }
 
-  return <PageBarRoot hasTabBar>
+  return <PageBarRoot hasTabBar={false}>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
       <View onClick={handleClickTitle}>
