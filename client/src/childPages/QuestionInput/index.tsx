@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2021-01-04 15:51:51
+ * @LastEditTime 2021-01-05 11:05:14
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -56,10 +56,14 @@ const QuestionInput: React.FC<Iprops> = ({
 
   // 返回上一级
   const handleClickBack = () => {
-    Taro.navigateBack();
+    Taro.reLaunch({
+      url: pagePath.home
+    });
+    
   }
 
   useEffect(() => {
+
     const query = Taro.createSelectorQuery()
     query.select('#editor').boundingClientRect()
     query.selectViewport().scrollOffset()

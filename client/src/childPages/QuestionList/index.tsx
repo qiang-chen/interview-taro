@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2021-01-05 10:10:13
+ * @LastEditTime 2021-01-05 11:05:05
  * @LastEditors cq
  */
 
@@ -75,10 +75,10 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
 
   // 返回上一级
   const handleClickBack = () => {
-    Taro.navigateBack();
-    // Taro.redirectTo({
-    //   url: pagePath.home
-    // })
+    // Taro.navigateBack();
+    Taro.reLaunch({
+      url: pagePath.home
+    })
   }
   // 点赞
   const handFabulous = (questionId) => {
