@@ -208,9 +208,10 @@ const QuestionDetail: React.FC<Iprops> = ({
   }
 
   const handleClickBack = () => {
-    Taro.redirectTo({
-      url: pagePath.questionList
-    })
+    Taro.navigateBack();
+    // Taro.redirectTo({
+    //   url: pagePath.questionList
+    // })
   }
 
   // 用户回复评论保存ID
