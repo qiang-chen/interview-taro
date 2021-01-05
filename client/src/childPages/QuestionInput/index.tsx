@@ -2,7 +2,7 @@
  * @description 题库录入
  * @author cq
  * @Date 2020-11-23 14:00:35
- * @LastEditTime 2021-01-05 11:05:14
+ * @LastEditTime 2021-01-05 11:06:20
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -63,7 +63,6 @@ const QuestionInput: React.FC<Iprops> = ({
   }
 
   useEffect(() => {
-
     const query = Taro.createSelectorQuery()
     query.select('#editor').boundingClientRect()
     query.selectViewport().scrollOffset()

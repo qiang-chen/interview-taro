@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2020-12-29 17:51:37
+ * @LastEditTime 2021-01-05 11:06:45
  * @LastEditors cq
  */
 
@@ -38,14 +38,15 @@ const namespace = 'home';
 
 const homeList = [
   {
-    icon: "https://img.sunlands.wang/addSalt/img/1.0/home/inputVoucher.png",
-    content: "题库录入",
-    names: "bs1"
-  }, {
     icon: "https://img.sunlands.wang/addSalt/img/1.0/home/lookVoucher.png",
     content: "题库列表",
     names: "bs2"
-  }, 
+  },
+  {
+    icon: "https://img.sunlands.wang/addSalt/img/1.0/home/inputVoucher.png",
+    content: "题库录入",
+    names: "bs1"
+  },  
   // {
   //   icon: "https://img.sunlands.wang/addSalt/img/1.0/home/profitLossRF.png",
   //   content: "论坛交流",
