@@ -5,11 +5,13 @@
 .color {
   color: red;
 }
+
 .comment-title {
   display: flex;
   align-items: center;
-  margin:0 30rpx 40rpx;
+  margin: 0 30rpx 40rpx;
 }
+
 .head-title {
   display: flex;
   align-items: center;
@@ -46,7 +48,8 @@
     flex-direction: column;
     align-items: center;
     color: #C4C4C4;
-    .thumbsLength{
+
+    .thumbsLength {
       width: 40px;
     }
   }
@@ -74,7 +77,7 @@
 }
 
 .addBtn {
-  color: #4EEE94 ;
+  color: #4EEE94;
   border: 1px solid #4EEE94;
 }
 
@@ -91,19 +94,26 @@
 .aaa {
   border: 1px solid red
 }
-.addNewComment{
-  display:'flex';
-  .commentInput{
+
+.addNewComment {
+  display: 'flex';
+
+  .commentInput {
     // width:30%
   }
 }
-.thumb{
-  font-size:36rpx;
+
+.thumb {
+  font-size: 36rpx;
 }
 
-.two_thumb{
+.two_thumb {
   display: flex;
   justify-content: space-between;
   padding-right: 20px;
   box-sizing: border-box;
+}
+
+.at-article__p {
+  text-indent: 52px
 }
