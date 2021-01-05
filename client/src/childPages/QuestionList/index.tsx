@@ -3,7 +3,7 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2021-01-05 16:02:49
+ * @LastEditTime 2021-01-05 19:11:09
  * @LastEditors cq
  */
 
@@ -51,14 +51,16 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
     console.log("点击首页标题")
   }
 
-  useDidShow(() => {
+  useEffect(() => {
+ 
     Taro.cloud.callFunction({
       // 要调用的云函数名称
       name: 'subject',
       // 传递给云函数的event参数
       data: {
         keyword: "",
-        ...pageObj
+        page: 1,
+        pageSize: 10
       }
     }).then(res => {
       const { result } = res;
@@ -67,15 +69,11 @@ const Home: React.FC<Iprops> = ({ userInfo, openid }) => {
         console.log("服务器错误");
         return
       }
-      setPageObj({
-        page: 1,
-        pageSize: 10
-      })
       setSubjectList(data)
       flag = false;
       setIsOpened(false)
     })
-  })
+  },[])
 
   // 返回上一级
   const handleClickBack = () => {

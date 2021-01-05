@@ -2,7 +2,7 @@
  * @description 所有浏览者的信息
  * @author cq
  * @Date 2021-01-05 14:41:03
- * @LastEditTime 2021-01-05 15:24:32
+ * @LastEditTime 2021-01-05 19:23:52
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -156,7 +156,7 @@ const Visitors: React.FC<Iprops> = ({ }) => {
         scrollWithAnimation
         scrollTop={0}
         style={{
-          height: Taro.getSystemInfoSync().windowHeight + "px"
+          height: Taro.getSystemInfoSync().windowHeight-145 + "px",
         }}
         lowerThreshold={50}  //距底部/右边多远时，触发 scrolltolower 事件
         // upperThreshold={50}  //距顶部/左边多远时，触发 scrolltoupper 事件
