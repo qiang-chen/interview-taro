@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-06 10:32:00
+ * @LastEditTime 2021-01-06 10:40:50
  * @LastEditors cq
  */
 
@@ -43,7 +43,7 @@ const QuestionDetail: React.FC<Iprops> = ({
   const [commentListAll, setCommentListAll] = useState<any>([]);//所有的评论
   const [commentId, setCommentId] = useState("");// 当前的评论IDcommentId
   const [isOpenInput, setOpenInput] = useState(false);
-  const [curItem, setcurItem] = useState({})
+  const [curItem, setcurItem] = useState<any>({})
   const [comment2, setComment2] = useState("");
 
 
