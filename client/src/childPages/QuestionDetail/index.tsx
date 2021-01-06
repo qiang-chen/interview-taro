@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-05 19:41:35
+ * @LastEditTime 2021-01-06 10:32:00
  * @LastEditors cq
  */
 
@@ -264,24 +264,26 @@ const QuestionDetail: React.FC<Iprops> = ({
             <View className='at-article__comment'>{item.text}</View>
           </View>)
         } else {
-          const preItem = commentListAll.find(el => el._id == item.commentId)
-          domArr.push(<View className="two_thumb">
-            <View>
-              <View className='at-article__comment commentContent'>
-                <View className='nickNameOnly'>{item.userInfo.nickName}</View>
+          const preItem = commentListAll.find(el => el._id == item.commentId);
+          if (preItem) {
+            domArr.push(<View className="two_thumb">
+              <View>
+                <View className='at-article__comment commentContent'>
+                  <View className='nickNameOnly'>{item.userInfo.nickName}</View>
                   回复
                 <View className='nickNameOnly'>{preItem && preItem.userInfo && preItem.userInfo.nickName}&nbsp;</View> :
             </View>
-              <View className='at-article__comment'>{item.text}</View>
-            </View>
-            <View>
-              <View className='thumb' onClick={() => handCommentUser(item)}>💬</View>
-              {
-                openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <View className='thumb' onClick={() => handCommentRemove(item)}>删除</View>
-              }
-            </View>
+                <View className='at-article__comment'>{item.text}</View>
+              </View>
+              <View>
+                <View className='thumb' onClick={() => handCommentUser(item)}>💬</View>
+                {
+                  openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && <View className='thumb' onClick={() => handCommentRemove(item)}>删除</View>
+                }
+              </View>
 
-          </View>)
+            </View>)
+          }
         }
         if (element.children && element.children.length) {
           // domArr.push(<AtDivider />)
@@ -399,14 +401,17 @@ const QuestionDetail: React.FC<Iprops> = ({
 
       <AtFloatLayout isOpened={isOpenInput} title="" onClose={handleCloseInput}>
         <View>
-          <AtInput
-            name='value1'
-            type='text'
-            value={comment}
-            placeholder={`回复${curItem && curItem.userInfo && curItem.userInfo.nickName}`}
-            // '输入你的想法.....'
-            onChange={handCommentChange}
-          />
+          {
+            curItem.userInfo && <AtInput
+              name='value1'
+              type='text'
+              value={comment}
+              placeholder={`回复${curItem.userInfo.nickName}`}
+              // '输入你的想法.....'
+              onChange={handCommentChange}
+            />
+          }
+          
           <AtButton onClick={() => handComment(0)} className='addBtn'>提交回复</AtButton>
         </View>
       </AtFloatLayout>
