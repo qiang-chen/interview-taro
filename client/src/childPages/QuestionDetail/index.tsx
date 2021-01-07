@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-07 16:38:24
+ * @LastEditTime 2021-01-07 17:14:02
  * @LastEditors cq
  */
 
@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import deep from "./utils/index"
 import classNames from "classnames"
 import produce from 'immer';
-import { AtAvatar, AtList, AtListItem, AtButton, AtNoticebar, AtIcon, AtDivider, AtInput, AtFloatLayout } from 'taro-ui'
+import { AtAvatar, AtList, AtListItem, AtButton, AtNoticebar, AtIcon, AtDivider, AtInput, AtFloatLayout, AtActivityIndicator } from 'taro-ui'
 import '@tarojs/taro/html.css'
 import './index.scss'
 
@@ -46,6 +46,8 @@ const QuestionDetail: React.FC<Iprops> = ({
   const [curItem, setcurItem] = useState<any>({})
   const [comment2, setComment2] = useState("");
   const [imgList, setImgList] = useState([]); //图片列表  用于预览使用
+  const [isOpened, setIsOpened] = useState(true); //loading开关
+
 
 
   // let commentId = ""
@@ -88,6 +90,7 @@ const QuestionDetail: React.FC<Iprops> = ({
         return pre
       }, []))
       setDetailObj(data)
+      setIsOpened(false)
     })
   }, []);
 
@@ -352,7 +355,12 @@ const QuestionDetail: React.FC<Iprops> = ({
         题库详情
         </View>
     </CusNavBar>
-
+    <AtActivityIndicator
+      content='加载中...'
+      size={74}
+      mode="center"
+      isOpened={isOpened}
+    />
     <View className='at-article'>
       <View className='at-article__h1'>
         {title}

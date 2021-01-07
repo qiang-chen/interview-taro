@@ -3,23 +3,23 @@
  * @description 首页
  * @author cq
  * @Date 2020-05-09 16:00:34
- * @LastEditTime 2021-01-05 11:06:45
+ * @LastEditTime 2021-01-07 20:24:00
  * @LastEditors cq
  */
 
 
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import IconItem from "./components/iconItem/index"
 import { View, Text, Image } from '@tarojs/components'
 import AppTabBar from '@/containers/AppTabBar'
 // import pagePath from '@config/pagePath'
 import CusNavBar from '@/components/CusNavBar';
 import PageBarRoot from '@/containers/PageBarRoot';
-import { AtFloatLayout, AtSwipeAction, AtModal, AtToast } from 'taro-ui'
+import { AtFloatLayout, AtSwipeAction, AtModal, AtToast, AtNoticebar } from 'taro-ui'
 import { connect } from "react-redux";
 // import isEmpty from '@/utils/isEmpty'
 import { HomeState } from "@/ts-types/store/index";
-import React from 'react';
+import React, { useState } from 'react';
 import { UserInfo } from '@/ts-types/store/AppState';
 import './index.scss'
 import CusShare from '@/components/CusShare';
@@ -46,7 +46,7 @@ const homeList = [
     icon: "https://img.sunlands.wang/addSalt/img/1.0/home/inputVoucher.png",
     content: "题库录入",
     names: "bs1"
-  },  
+  },
   // {
   //   icon: "https://img.sunlands.wang/addSalt/img/1.0/home/profitLossRF.png",
   //   content: "论坛交流",
@@ -58,6 +58,26 @@ const homeList = [
 
 
 const Home: React.FC<Iprops> = ({ userInfo }) => {
+
+  const [noticeText, setNoticeText] = useState([])
+
+  useDidShow(() => {
+    Taro.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'notice',
+    }).then((res: any) => {
+      const result: any = res.result;
+      if (!result.code) {
+        Taro.showToast({
+          title: '积分查询失败',
+          icon: 'none'
+        })
+        return
+      }
+      setNoticeText(result.data)
+    })
+  })
+  
   // 点击顶部
   const handGetUserInfo = () => {
     console.log("点击顶部")
@@ -80,6 +100,14 @@ const Home: React.FC<Iprops> = ({ userInfo }) => {
         </View>
       </CusNavBar>
       <View className='page-home'>
+        {
+          noticeText.map((item:any) => <AtNoticebar marquee speed={60}>
+            {
+              item.notice
+            }
+        </AtNoticebar>)
+        }
+        
         <View className='home_content'>
           {homeList.map((item) => {
             return <IconItem
