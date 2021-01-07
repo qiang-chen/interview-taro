@@ -2,7 +2,7 @@
  * @description 详情页面
  * @author cq
  * @Date 2020-12-21 20:09:50
- * @LastEditTime 2021-01-06 10:40:50
+ * @LastEditTime 2021-01-07 16:38:24
  * @LastEditors cq
  */
 
@@ -45,6 +45,7 @@ const QuestionDetail: React.FC<Iprops> = ({
   const [isOpenInput, setOpenInput] = useState(false);
   const [curItem, setcurItem] = useState<any>({})
   const [comment2, setComment2] = useState("");
+  const [imgList, setImgList] = useState([]); //图片列表  用于预览使用
 
 
   // let commentId = ""
@@ -80,6 +81,12 @@ const QuestionDetail: React.FC<Iprops> = ({
 
       arr.splice(arr.length - 1, 1)
       setCommentList(arr)
+      setImgList(data.content.ops.reduce((pre, cur) => {
+        if (cur.attributes) {
+          pre.push(cur.insert.image)
+        }
+        return pre
+      }, []))
       setDetailObj(data)
     })
   }, []);
@@ -329,6 +336,15 @@ const QuestionDetail: React.FC<Iprops> = ({
     console.log(detailObj);
   }
 
+  // 预览图片
+  const hangImage = (src) => {
+    console.log(imgList, "imgList");
+    Taro.previewImage({
+      current: src, // 当前显示图片的http链接
+      urls: imgList
+    })
+  }
+
   return <PageBarRoot hasTabBar={false}>
     {/* navBar */}
     <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>
@@ -360,13 +376,13 @@ const QuestionDetail: React.FC<Iprops> = ({
         <View className='at-article__section'>
           {
             content.ops && content.ops.map(item => {
-              console.log(`<h1>${item.insert.replace(/\n/g, "</h1><h1>")}</h1>`);
               if (item.attributes) {
                 // 图片
                 return <Image
                   mode='widthFix'
                   className='at-article__img'
                   src={item.insert.image}
+                  onClick={() => hangImage(item.insert.image)}
                 />
               } else {
                 // 文字 at-article__p 
@@ -411,7 +427,7 @@ const QuestionDetail: React.FC<Iprops> = ({
               onChange={handCommentChange}
             />
           }
-          
+
           <AtButton onClick={() => handComment(0)} className='addBtn'>提交回复</AtButton>
         </View>
       </AtFloatLayout>
