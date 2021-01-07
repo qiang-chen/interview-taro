@@ -2,7 +2,7 @@
  * @description 个人联系方式页面
  * @author cq
  * @Date 2020-12-09 16:26:44
- * @LastEditTime 2020-12-09 16:43:17
+ * @LastEditTime 2021-01-07 20:28:32
  * @LastEditors cq
  */
 
@@ -25,16 +25,19 @@ const Contact: React.FC<IProps> = ({ }) => {
   const handleClickBack = () => {
     Taro.navigateBack();
   }
-  
+
   return (
-     <PageBarRoot hasTabBar>
+    <PageBarRoot hasTabBar>
       <CusShare>
         {/* navBar */}
         <CusNavBar leftIconType='chevron-left' onClickLeftIcon={handleClickBack}>联系方式</CusNavBar>
 
         <View>
-          个人联系方式：1715584439
+          微信号：1715584439
        </View>
+        <View>
+          请注明出处       
+        </View>
       </CusShare>
       {/* tabBar */}
     </PageBarRoot>

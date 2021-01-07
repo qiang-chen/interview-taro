@@ -2,7 +2,7 @@
  * @description 所有浏览者的信息
  * @author cq
  * @Date 2021-01-05 14:41:03
- * @LastEditTime 2021-01-05 19:23:52
+ * @LastEditTime 2021-01-07 20:42:40
  * @LastEditors cq
  */
 /* eslint-disable import/first */
@@ -32,6 +32,7 @@ import './index.scss'
 
 type VisitorsProps = {
   dispatch?: any
+  openid: string
 }
 
 type Iprops = VisitorsProps
@@ -43,12 +44,12 @@ const namespace = 'Visitors';
 
 let flag = false; //防止多次触发的开关
 
-const Visitors: React.FC<Iprops> = ({ }) => {
+const Visitors: React.FC<Iprops> = ({ openid }) => {
 
   const [visitorsList, setVisitorsList] = useState<any>([]);
   const [pageObj, setPageObj] = useState({
     page: 1,
-    pageSize: 10
+    pageSize: 10,
   }); //分页器的选择
   const [atDividerText, setAtDividerText] = useState(0); //分割线的提示文案 0正在加载 1没有更多了
 
@@ -156,7 +157,7 @@ const Visitors: React.FC<Iprops> = ({ }) => {
         scrollWithAnimation
         scrollTop={0}
         style={{
-          height: Taro.getSystemInfoSync().windowHeight-145 + "px",
+          height: Taro.getSystemInfoSync().windowHeight - 145 + "px",
         }}
         lowerThreshold={50}  //距底部/右边多远时，触发 scrolltolower 事件
         // upperThreshold={50}  //距顶部/左边多远时，触发 scrolltoupper 事件
@@ -168,9 +169,9 @@ const Visitors: React.FC<Iprops> = ({ }) => {
             visitorsList.map(item => {
               const { userInfo = {} } = item;
               return <AtListItem
-                title={userInfo.nickName}
+                title={`${userInfo.nickName.trim() || "无名氏"}-${openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && (userInfo.province || '无') + '-' + (userInfo.city || '无')}`}
                 arrow='right'
-                note={getSex(userInfo.gender)}
+                note={`${getSex(userInfo.gender)}-${openid == "o2ml-5c_nKI2Tf9pLBJBCdnbu5v4" && item.created}`}
                 thumb={userInfo.avatarUrl}
                 extraText={`积分:${item.integral}`}
               />
@@ -189,7 +190,7 @@ const Visitors: React.FC<Iprops> = ({ }) => {
 
 function mapStateToProps(state) {
   return ({
-
+    openid: state.app.openid
   })
 }
 
