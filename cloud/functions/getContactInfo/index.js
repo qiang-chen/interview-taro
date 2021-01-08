@@ -2,7 +2,7 @@
  * @description 获取评论列表
  * @author cq
  * @Date 2020-12-22 17:49:24
- * @LastEditTime 2020-12-31 17:21:23
+ * @LastEditTime 2021-01-08 19:30:23
  * @LastEditors cq
  */
 
@@ -16,7 +16,7 @@ cloud.init({
 exports.main = async (event, context) => {
   const { userId } = event;
   const db = cloud.database();
-  let data = [];
+  let data = {};
   let code = 1;
   try {
     let result = await db.collection('contact_info')
@@ -26,7 +26,7 @@ exports.main = async (event, context) => {
       })
       .end();
 
-    data = result.list[0];
+    data = result.list[0]||{};
 
   } catch (error) {
     console.error(error)
